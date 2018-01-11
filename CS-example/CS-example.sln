@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CS-example", "CS-example\CS-example.csproj", "{C4A1ACB4-95FC-48A3-A7A5-FFC6D9A7CD33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CS-example-winform", "CS-example-winform\CS-example-winform.csproj", "{524F2DD1-CB1D-4878-9D27-BF57D14D2CCF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C4A1ACB4-95FC-48A3-A7A5-FFC6D9A7CD33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4A1ACB4-95FC-48A3-A7A5-FFC6D9A7CD33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4A1ACB4-95FC-48A3-A7A5-FFC6D9A7CD33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{524F2DD1-CB1D-4878-9D27-BF57D14D2CCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{524F2DD1-CB1D-4878-9D27-BF57D14D2CCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{524F2DD1-CB1D-4878-9D27-BF57D14D2CCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{524F2DD1-CB1D-4878-9D27-BF57D14D2CCF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {38BAE3D0-E4E4-4F2A-8162-287F8A0A7E00}
+	EndGlobalSection
+EndGlobal
