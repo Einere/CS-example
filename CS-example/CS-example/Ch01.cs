@@ -10,20 +10,19 @@ namespace CS_example
     {
         static void Main(string[] args)
         {
-            /*
-            char var1 = 'A';
-            char var2 = '\x0041';
-            char var3 = (char)65;
-            char var4 = '\u0041';
 
-            Console.WriteLine("문자 표현 : {0}", var1);
-            Console.WriteLine("hexa : {0}", var2);
-            Console.WriteLine("ascii : {0}", var3);
-            Console.WriteLine("unicode : {0}", var4);
-            */
-            Ch02_ex05 tmp = new Ch02_ex05();
+            //char var1 = 'A';
+            //char var2 = '\x0041';
+            //char var3 = (char)65;
+            //char var4 = '\u0041';
+
+            //Console.WriteLine("문자 표현 : {0}", var1);
+            //Console.WriteLine("hexa : {0}", var2);
+            //Console.WriteLine("ascii : {0}", var3);
+            //Console.WriteLine("unicode : {0}", var4);
+
+            Ch06 tmp = new Ch06();
             tmp.main();
-
         }
     }
 

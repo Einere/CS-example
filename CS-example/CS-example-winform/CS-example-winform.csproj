@@ -81,6 +81,114 @@
     <Compile Include="Ch03_Ex06.Designer.cs">
       <DependentUpon>Ch03_Ex06.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ch04_Ex01.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ch04_Ex01.Designer.cs">
+      <DependentUpon>Ch04_Ex01.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ch04_Ex02.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ch04_Ex02.Designer.cs">
+      <DependentUpon>Ch04_Ex02.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ch04_Ex03.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ch04_Ex03.Designer.cs">
+      <DependentUpon>Ch04_Ex03.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ch04_Ex04.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ch04_Ex04.Designer.cs">
+      <DependentUpon>Ch04_Ex04.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ch04_Ex05.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ch04_Ex05.Designer.cs">
+      <DependentUpon>Ch04_Ex05.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ch05_Ex01.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ch05_Ex01.Designer.cs">
+      <DependentUpon>Ch05_Ex01.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ch05_Ex02_1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ch05_Ex02_1.Designer.cs">
+      <DependentUpon>Ch05_Ex02_1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ch05_Ex01_1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ch05_Ex01_1.Designer.cs">
+      <DependentUpon>Ch05_Ex01_1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ch05_Ex02.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ch05_Ex02.Designer.cs">
+      <DependentUpon>Ch05_Ex02.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ch05_Ex03.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ch05_Ex03.Designer.cs">
+      <DependentUpon>Ch05_Ex03.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ch05_Ex03_1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ch05_Ex03_1.Designer.cs">
+      <DependentUpon>Ch05_Ex03_1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ch05_Ex04.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ch05_Ex04.Designer.cs">
+      <DependentUpon>Ch05_Ex04.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ch05_Ex05.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ch05_Ex05.Designer.cs">
+      <DependentUpon>Ch05_Ex05.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ch04_Ex05_01.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ch04_Ex05_01.Designer.cs">
+      <DependentUpon>Ch04_Ex05_01.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ch06_Ex03.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ch06_Ex03.Designer.cs">
+      <DependentUpon>Ch06_Ex03.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ch07_Ex04.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ch07_Ex04.Designer.cs">
+      <DependentUpon>Ch07_Ex04.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ch08_Ex01.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ch08_Ex01.Designer.cs">
+      <DependentUpon>Ch08_Ex01.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ch08_Ex02.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ch08_Ex02.Designer.cs">
+      <DependentUpon>Ch08_Ex02.cs</DependentUpon>
+    </Compile>
     <Compile Include="Run.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Ch03_Ex01.resx">
@@ -100,6 +208,57 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Ch03_Ex06.resx">
       <DependentUpon>Ch03_Ex06.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ch04_Ex01.resx">
+      <DependentUpon>Ch04_Ex01.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ch04_Ex02.resx">
+      <DependentUpon>Ch04_Ex02.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ch04_Ex03.resx">
+      <DependentUpon>Ch04_Ex03.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ch04_Ex04.resx">
+      <DependentUpon>Ch04_Ex04.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ch04_Ex05.resx">
+      <DependentUpon>Ch04_Ex05.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ch05_Ex01.resx">
+      <DependentUpon>Ch05_Ex01.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ch05_Ex01_1.resx">
+      <DependentUpon>Ch05_Ex01_1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ch05_Ex02_1.resx">
+      <DependentUpon>Ch05_Ex02_1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ch05_Ex02.resx">
+      <DependentUpon>Ch05_Ex02.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ch05_Ex03.resx">
+      <DependentUpon>Ch05_Ex03.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ch05_Ex03_1.resx">
+      <DependentUpon>Ch05_Ex03_1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ch05_Ex04.resx">
+      <DependentUpon>Ch05_Ex04.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ch05_Ex05.resx">
+      <DependentUpon>Ch05_Ex05.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ch04_Ex05_01.resx">
+      <DependentUpon>Ch04_Ex05_01.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ch06_Ex03.resx">
+      <DependentUpon>Ch06_Ex03.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ch07_Ex04.resx">
+      <DependentUpon>Ch07_Ex04.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ch08_Ex01.resx">
+      <DependentUpon>Ch08_Ex01.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

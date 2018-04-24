@@ -36,7 +36,8 @@ namespace CS_example_winform
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if(listView1.Items.Count > 0) listView1.Items.RemoveAt(listView1.SelectedIndices[0]);
+            if (listView1.FocusedItem == null) return;
+            else listView1.FocusedItem.Remove();
         }
     }
 }

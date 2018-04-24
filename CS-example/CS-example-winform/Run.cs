@@ -16,7 +16,7 @@ namespace CS_example_winform
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Ch03_Ex06());
+            Application.Run(new Ch05_Ex03());
         }
     }
 }
