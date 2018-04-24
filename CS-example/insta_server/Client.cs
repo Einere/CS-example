@@ -33,10 +33,10 @@ namespace insta_server
         public Client()
         {
             InitializeComponent();
-            tb_id.Visible = false;
-            tb_password.Visible = false;
-            bt_login.Visible = false;
-            bt_signup.Visible = false;
+            tb_id.Enabled = false;
+            tb_password.Enabled = false;
+            bt_login.Enabled = false;
+            bt_signup.Enabled = false;
         }
 
         private void pb_home_icon_Click(object sender, EventArgs e)
@@ -133,11 +133,13 @@ namespace insta_server
                 //get stream
                 this.stream = this.client.GetStream();
 
-                //set visible textbox and button
-                tb_id.Visible = true;
-                tb_password.Visible = true;
-                bt_login.Visible = true;
-                bt_signup.Visible = true;
+                //set enable textbox and button
+                tb_ip.Enabled = false;
+                tb_port.Enabled = false;
+                tb_id.Enabled = true;
+                tb_password.Enabled = true;
+                bt_login.Enabled = true;
+                bt_signup.Enabled = true;
 
                 //set this button to "disconnect"
                 bt_connect.ForeColor = Color.OrangeRed;
@@ -161,11 +163,13 @@ namespace insta_server
 
                 this.is_connected = false;
 
-                //set invisible textbox and button
-                tb_id.Visible = true;
-                tb_password.Visible = true;
-                bt_login.Visible = true;
-                bt_signup.Visible = true;
+                //set enable textbox and button
+                tb_ip.Enabled = true;
+                tb_port.Enabled = true;
+                tb_id.Enabled = false;
+                tb_password.Enabled = false;
+                bt_login.Enabled = false;
+                bt_signup.Enabled = false;
 
                 //set this button to "connect"
                 bt_connect.ForeColor = Color.Black;
