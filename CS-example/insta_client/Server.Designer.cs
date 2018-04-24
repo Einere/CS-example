@@ -109,11 +109,13 @@
             this.Index,
             this.ID,
             this.Password});
+            this.lv_member.GridLines = true;
             this.lv_member.Location = new System.Drawing.Point(12, 67);
             this.lv_member.Name = "lv_member";
             this.lv_member.Size = new System.Drawing.Size(346, 371);
             this.lv_member.TabIndex = 7;
             this.lv_member.UseCompatibleStateImageBehavior = false;
+            this.lv_member.View = System.Windows.Forms.View.Details;
             // 
             // Index
             // 

@@ -85,6 +85,30 @@ namespace insta_client
                 return;
             }
 
+            this.Invoke(new MethodInvoker(delegate ()
+            {
+                //set offset to head
+                if (this.f_reader.Peek() < 0) this.f_reader.BaseStream.Seek(0, SeekOrigin.Begin);
+                //get data from text file
+                int i = 1;
+                //set item and add at list view
+                while (f_reader.Peek() >= 0)
+                {
+                    ListViewItem item = new ListViewItem(i.ToString());
+                    item.SubItems.Add(f_reader.ReadLine());
+                    item.SubItems.Add(f_reader.ReadLine());
+                    lv_member.Items.Add(item);
+                    i++;
+                }
+                MessageBox.Show("qoqoqoqo");
+
+                //change start button
+                bt_start.ForeColor = Color.OrangeRed;
+                bt_start.Text = "stop";
+
+                tb_log.AppendText("client connected...!\n");
+            }));
+
             //check client is connected or not
             if (!this.is_connected)
             {
@@ -98,21 +122,6 @@ namespace insta_client
                     tb_log.AppendText("waiting for client...\n");
                 }));
 
-                //set offset to head
-                if (this.f_reader.Peek() < 0) this.f_reader.BaseStream.Seek(0, SeekOrigin.Begin);
-                //get data from text file
-                int i = 1;
-                //set item and add at list view
-                while(f_reader.Peek() != null)
-                {
-                    ListViewItem item = new ListViewItem(i.ToString());
-                    item.SubItems.Add(f_reader.ReadLine());
-                    item.SubItems.Add(f_reader.ReadLine());
-                    lv_member.Items.Add(item);
-                }
-                
-                
-
                 //get client socket
                 TcpClient client = this.listener.AcceptTcpClient();
 
@@ -121,14 +130,7 @@ namespace insta_client
                 {
                     this.is_connected = true;
 
-                    this.Invoke(new MethodInvoker(delegate ()
-                    {
-                        //change start button
-                        bt_start.ForeColor = Color.OrangeRed;
-                        bt_start.Text = "stop";
-
-                        tb_log.AppendText("client connected...!\n");
-                    }));
+                    //read data and change button~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
 
                     //get client stream
                     this.stream = client.GetStream();
@@ -222,6 +224,8 @@ namespace insta_client
                 //change start button
                 bt_start.ForeColor = Color.Black;
                 bt_start.Text = "start";
+
+                lv_member.Items.Clear();
 
                 tb_log.AppendText("client disconnected or receive wired packet...!\n");
             }));

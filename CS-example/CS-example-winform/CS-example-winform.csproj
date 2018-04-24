@@ -183,12 +183,6 @@
     <Compile Include="Ch08_Ex01.Designer.cs">
       <DependentUpon>Ch08_Ex01.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ch08_Ex02.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Ch08_Ex02.Designer.cs">
-      <DependentUpon>Ch08_Ex02.cs</DependentUpon>
-    </Compile>
     <Compile Include="Run.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Ch03_Ex01.resx">
