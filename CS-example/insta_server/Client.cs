@@ -88,29 +88,6 @@ namespace insta_server
             }
         }
 
-        private void bt_signup_Click(object sender, EventArgs e)
-        {
-            if (this.is_connected)
-            {
-                //set packet to send
-                Member mem = new Member();
-                mem.Type = (int)PacketType.member;
-                mem.ID = this.tb_id.Text;
-                mem.password = this.tb_password.Text;
-
-                //serialize packet
-                Packet.Serialize(mem).CopyTo(this.w_buffer, 0);
-                this.send();
-            }
-        }
-
-        private void Client_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            //close socket and stream
-            if (this.client != null) this.client.Close();
-            if (this.stream != null) this.stream.Close();
-        }
-
         private void bt_connect_Click(object sender, EventArgs e)
         {
             //check if connected
@@ -155,7 +132,7 @@ namespace insta_server
                 }
 
                 //close socket
-                if(this.client != null)
+                if (this.client != null)
                 {
                     //this.client.Close();
                     //this.client = null;
@@ -177,9 +154,138 @@ namespace insta_server
             }
         }
 
+        private bool preparing_receive()
+        {
+            //receive result packet from server
+            int n_read = 0;
+
+            try
+            {
+                //read data from stream to r_buffer
+                n_read = this.stream.Read(this.r_buffer, 0, size);
+            }
+            catch
+            {
+                MessageBox.Show("failed to read stream");
+                return false;
+            }
+
+            //if r_buffer is null
+            if (this.r_buffer == null)
+            {
+                MessageBox.Show("r_buffer is null");
+                return false;
+            }
+
+            //need to deal when disconnecting signal recieved
+            if (n_read == 0)
+            {
+                this.is_connected = false;
+                MessageBox.Show("received 0 length packet");
+                return false;
+            }
+
+            return true;
+        }
+
+        private void bt_signup_Click(object sender, EventArgs e)
+        {
+            if (this.is_connected)
+            {
+                //set packet to send
+                Member mem = new Member();
+                mem.Type = (int)PacketType.member;
+                mem.purpose = 1;
+                mem.ID = this.tb_id.Text;
+                mem.password = this.tb_password.Text;
+
+                //serialize packet and send
+                Packet.Serialize(mem).CopyTo(this.w_buffer, 0);
+                this.send();
+
+                //receive result packet from server
+                //if error occur during prepare stream & r_buffer
+                if (!preparing_receive()) return;
+
+                Packet packet = (Packet)Packet.Deserialize(this.r_buffer);
+
+                //if received flag packet
+                if (packet.Type == (int)PacketType.flag)
+                {
+                    this.success = (Flag)Packet.Deserialize(this.r_buffer);
+
+                    if (this.success.success)
+                    {
+                        MessageBox.Show("sign in success!");
+                    }
+                    else
+                    {
+                        MessageBox.Show("sign in fail!");
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("not connected");
+            }
+        }
+
         private void bt_login_Click(object sender, EventArgs e)
         {
+            if (this.is_connected)
+            {
+                //set packet to send
+                Member mem = new Member();
+                mem.Type = (int)PacketType.member;
+                mem.purpose = 2;
+                mem.ID = this.tb_id.Text;
+                mem.password = this.tb_password.Text;
 
+                //serialize packet and send
+                Packet.Serialize(mem).CopyTo(this.w_buffer, 0);
+                this.send();
+
+                //receive result packet from server
+                //if error occur during prepare stream & r_buffer
+                if (!preparing_receive()) return;
+
+                Packet packet = (Packet)Packet.Deserialize(this.r_buffer);
+
+                //if received flag packet
+                if (packet.Type == (int)PacketType.flag)
+                {
+                    this.success = (Flag)Packet.Deserialize(this.r_buffer);
+
+                    if (this.success.success)
+                    {
+                        //if success to log in
+                        MessageBox.Show("log in success!");
+
+                        bt_login.ForeColor = Color.OrangeRed;
+                        bt_login.Text = "log out";
+                    }
+                    else
+                    {
+                        //if fail to log in
+                        MessageBox.Show("log in fail!");
+                    }
+                }
+            }
+            else
+            {
+
+            }
         }
+
+        private void Client_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            //close socket and stream
+            if (this.client != null) this.client.Close();
+            if (this.stream != null) this.stream.Close();
+        }
+
+        
+
+        
     }
 }

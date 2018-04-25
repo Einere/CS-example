@@ -64,11 +64,11 @@ namespace insta_packet
     [Serializable]
     public class Flag : Packet
     {
-        public bool seccess;
+        public bool success;
 
         public Flag()
         {
-            this.seccess = false;
+            this.success = false;
         }
     }
 
@@ -77,7 +77,9 @@ namespace insta_packet
     {
         public string ID;
         public string password;
-
+        //for sign in : 1
+        //for log in : 2
+        public int purpose;
         public Member()
         {
             this.ID = null;

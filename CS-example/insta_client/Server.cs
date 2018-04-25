@@ -54,173 +54,281 @@ namespace insta_client
 
         }
 
-        private void bt_start_Click(object sender, EventArgs e)
+        private void send()
         {
-            //if not complete ip & port textbox
-            if (tb_ip.TextLength == 0 || tb_port.TextLength == 0)
+            if (this.stream != null)
             {
-                MessageBox.Show("please type IP and port");
-                return;
-            }
+                //write w_buffer's data at stream, and flush
+                this.stream.Write(this.w_buffer, 0, this.w_buffer.Length);
+                this.stream.Flush();
 
-            //check file is exist, open or return
-            if (File.Exists("member.txt"))
-            {
-                try
-                {
-                    f_reader = new StreamReader("member.txt");
-                }
-                catch
-                {
-                    MessageBox.Show("failed to open stream reader");
-                    this.listener.Stop();
-                    return;
-                }
-                
+                //init w_buffer
+                for (int i = 0; i < size; i++) this.w_buffer[i] = 0;
             }
             else
             {
-                MessageBox.Show("file isn't exist");
-                File.Create("member.txt"); // need to write encoding argument
-                return;
+                MessageBox.Show("this.stream is null");
+            }
+        }
+
+        private void read_load_m_file()
+        {
+            //set offset to head
+            if (this.f_reader.Peek() < 0) this.f_reader.BaseStream.Seek(0, SeekOrigin.Begin);
+
+            //get data from text file, set item and add at list view
+            int i = 1;
+            while (f_reader.Peek() >= 0)
+            {
+                ListViewItem item = new ListViewItem(i.ToString());
+                item.SubItems.Add(f_reader.ReadLine());
+                item.SubItems.Add(f_reader.ReadLine());
+                lv_member.Items.Add(item);
+                i++;
+            }
+            this.f_reader.Close();
+            this.f_reader = null;
+        }
+
+        private void sign_in(Flag result)
+        {
+            //check already exist member id
+            foreach (ListViewItem item in lv_member.Items)
+            {
+                //if already exist member id
+                if (item.SubItems[1].Text == this.member.ID)
+                {
+                    result.success = false;
+                    break;
+                }
             }
 
+            //if not already exist id, insert to lv_member
+            if (result.success == true)
+            {
+                //add data to lv_member
+                ListViewItem item = new ListViewItem((lv_member.Items.Count + 1).ToString());
+                item.SubItems.Add(this.member.ID);
+                item.SubItems.Add(this.member.password);
+                lv_member.Items.Add(item);
+
+                //log to tb_log
+                tb_log.AppendText(String.Format("{0} is registered...", this.member.ID));
+
+                //save received packet data to member.txt
+                if (this.f_writer == null) this.f_writer = new StreamWriter("member.txt", true);
+
+                f_writer.WriteLine(this.member.ID);
+                f_writer.WriteLine(this.member.password);
+                f_writer.Flush();
+                f_writer.Close();
+                f_writer = null;
+            }
+
+            //send result packet to client
+            Packet.Serialize(result).CopyTo(this.w_buffer, 0);
+            this.send();
+
+            MessageBox.Show("member account list update and send result packet complete");
+        }
+
+        private void log_in(Flag result)
+        {
+            result.success = false;
+            /*
+            for (int i = 0; i < lv_member.Items.Count; i++){
+                //if exist corresponding ID
+                if (lv_member.Items[i].SubItems[1].Text == this.member.ID)
+                {
+                    //if match ID & password
+                    if(lv_member.Items[i].SubItems[2].Text == this.member.password)
+                    {
+                        result.success = true;
+
+                        //log to tb_log
+                        tb_log.AppendText(String.Format("{0} is log in...", this.member.ID));
+                    }
+                }
+            }
+            */
+            foreach(ListViewItem item in lv_member.Items)
+            {
+                if(item.SubItems[1].Text == this.member.ID && item.SubItems[2].Text == this.member.password)
+                {
+                    result.success = true;
+
+                    //log to tb_log
+                    tb_log.AppendText(String.Format("{0} is log in...", this.member.ID));
+                }
+            }
+
+            //send result packet to client
+            Packet.Serialize(result).CopyTo(this.w_buffer, 0);
+            this.send();
+
+            MessageBox.Show("log in process and send result packet complete");
+        }
+
+        private void receive()
+        {
             this.Invoke(new MethodInvoker(delegate ()
             {
-                //set offset to head
-                if (this.f_reader.Peek() < 0) this.f_reader.BaseStream.Seek(0, SeekOrigin.Begin);
-                //get data from text file
-                int i = 1;
-                //set item and add at list view
-                while (f_reader.Peek() >= 0)
+                //if not complete ip & port textbox
+                if (tb_ip.TextLength == 0 || tb_port.TextLength == 0)
                 {
-                    ListViewItem item = new ListViewItem(i.ToString());
-                    item.SubItems.Add(f_reader.ReadLine());
-                    item.SubItems.Add(f_reader.ReadLine());
-                    lv_member.Items.Add(item);
-                    i++;
+                    MessageBox.Show("please type IP and port");
+                    return;
                 }
-                MessageBox.Show("qoqoqoqo");
+
+                //check file is exist, open or return
+                if (File.Exists("member.txt"))
+                {
+                    try
+                    {
+                        f_reader = new StreamReader("member.txt");
+                    }
+                    catch
+                    {
+                        MessageBox.Show("failed to open stream reader");
+                        this.listener.Stop();
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("file isn't exist");
+                    File.Create("member.txt"); // need to write encoding argument
+                    return;
+                }
+
+                //read and load member file
+                read_load_m_file();
 
                 //change start button
                 bt_start.ForeColor = Color.OrangeRed;
                 bt_start.Text = "stop";
 
-                tb_log.AppendText("client connected...!\n");
-            }));
+                MessageBox.Show("member account list load complete");
 
-            //check client is connected or not
-            if (!this.is_connected)
-            {
-                //waiting client
-                if (this.listener == null) this.listener = new TcpListener(Int32.Parse(tb_port.Text));
-                this.listener.Start();
-
-                //if not connected
-                this.Invoke(new MethodInvoker(delegate ()
+                //check client is connected or not
+                if (!this.is_connected)
                 {
+                    //waiting client
+                    if (this.listener == null) this.listener = new TcpListener(Int32.Parse(tb_port.Text));
+                    this.listener.Start();
+
+                    //if not connected
                     tb_log.AppendText("waiting for client...\n");
-                }));
-
-                //get client socket
-                TcpClient client = this.listener.AcceptTcpClient();
-
-                //if connected
-                if (client.Connected)
-                {
-                    this.is_connected = true;
-
-                    //read data and change button~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
-
-                    //get client stream
-                    this.stream = client.GetStream();
                     
-                    //read data from client until disconnection. 스레드로 만들어야 될 것 같다 (신호 수신용)
-                    while (this.is_connected)
+                    //get client socket
+                    TcpClient client = this.listener.AcceptTcpClient();
+
+                    //if connected
+                    if (client.Connected)
                     {
-                        int n_read = 0;
+                        this.is_connected = true;
 
-                        try
-                        {
-                            n_read = 0;
-                            //read data from stream to r_buffer
-                            n_read = this.stream.Read(r_buffer, 0, size);
-                        }
-                        catch
-                        {
-                            this.is_connected = false;
-                            this.stream = null;
-                        }
+                        tb_log.AppendText("client connected...!\n");
 
-                        //get packet and switch 
-                        if (this.r_buffer == null)
-                        {
-                            MessageBox.Show("r_buffer is null");
-                            return;
-                        }
+                        //get client stream
+                        this.stream = client.GetStream();
 
-                        //need to deal when disconnecting signal recieved
-                        if (n_read == 0)
+                        //read data from client until disconnection. 스레드로 만들어야 될 것 같다 (신호 수신용)
+                        while (this.is_connected)
                         {
-                            this.is_connected = false;
-                            continue;
-                        }
-                        Packet packet = (Packet)Packet.Deserialize(this.r_buffer);
+                            int n_read = 0;
 
-                        switch ((int)packet.Type)
-                        {
-                            case (int)PacketType.flag:
-                                {
-                                    this.success = (Flag)Packet.Deserialize(this.r_buffer);
-                                    this.Invoke(new MethodInvoker(delegate ()
+                            try
+                            {
+                                //read data from stream to r_buffer
+                                n_read = 0;
+                                n_read = this.stream.Read(r_buffer, 0, size);
+                            }
+                            catch
+                            {
+                                this.is_connected = false;
+                                this.stream = null;
+                            }
+
+                            //if r_buffer is null
+                            if (this.r_buffer == null)
+                            {
+                                MessageBox.Show("r_buffer is null");
+                                return;
+                            }
+
+                            //need to deal when disconnecting signal recieved before deserialize
+                            if (n_read == 0)
+                            {
+                                this.is_connected = false;
+                                continue;
+                            }
+
+                            Packet packet = (Packet)Packet.Deserialize(this.r_buffer);
+
+                            switch ((int)packet.Type)
+                            {
+                                case (int)PacketType.flag:
                                     {
-                                        string msg = String.Format("flag packet : success = {0}, ", this.success.seccess.ToString());
+                                        this.success = (Flag)Packet.Deserialize(this.r_buffer);
+
+                                        string msg = String.Format("flag packet : success = {0}, ", this.success.success.ToString());
                                         MessageBox.Show(msg);
-                                    }));
-                                    break;
-                                }
-                            case (int)PacketType.member:
-                                {
-                                    this.member = (Member)Packet.Deserialize(this.r_buffer);
-                                    this.Invoke(new MethodInvoker(delegate ()
+
+                                        break;
+                                    }
+                                case (int)PacketType.member:
                                     {
-                                        string msg = String.Format("member packet : id = {0}, password = {1}", this.member.ID, this.member.password);
-                                        MessageBox.Show(msg);
-                                    }));
-                                    break;
-                                }
-                            default:
-                                {
-                                    bt_start.ForeColor = Color.Black;
-                                    bt_start.Text = "start";
-                                    this.is_connected = false;
-                                    break;
-                                }
+                                        this.member = (Member)Packet.Deserialize(this.r_buffer);
+
+                                        //for response to client
+                                        Flag result = new Flag();
+                                        result.Type = (int)PacketType.flag;
+                                        result.success = true;
+
+                                        //if packet for sign in
+                                        if (this.member.purpose == 1)
+                                        {
+                                            sign_in(result);
+                                        }
+                                        //if packet for log in
+                                        else if(this.member.purpose == 2)
+                                        {
+                                            log_in(result);
+                                        }
+
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        bt_start.ForeColor = Color.Black;
+                                        bt_start.Text = "start";
+                                        this.is_connected = false;
+                                        break;
+                                    }
+                            }
                         }
+
                     }
+
 
                 }
 
-                
-            }
+                //if already connected or n_read == 0, disconnect
+                if (this.stream != null)
+                {
+                    this.stream.Close();
+                    this.stream = null;
+                }
 
-            //if already connected or n_read == 0, disconnect
-            if (this.stream != null)
-            {
-                this.stream.Close();
-                this.stream = null;
-            }
+                if (this.listener != null)
+                {
+                    this.listener.Stop();
+                    this.listener = null;
+                }
 
-            if (this.listener != null)
-            {
-                this.listener.Stop();
-                this.listener = null;
-            }
+                this.is_connected = false;
 
-            this.is_connected = false;
-
-            this.Invoke(new MethodInvoker(delegate ()
-            {
                 //change start button
                 bt_start.ForeColor = Color.Black;
                 bt_start.Text = "start";
@@ -229,7 +337,13 @@ namespace insta_client
 
                 tb_log.AppendText("client disconnected or receive wired packet...!\n");
             }));
+            
+        }
 
+        private void bt_start_Click(object sender, EventArgs e)
+        {
+            thread = new Thread(new ThreadStart(receive));
+            thread.Start();
         }
     }
 }
