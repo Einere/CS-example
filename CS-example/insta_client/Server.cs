@@ -22,14 +22,14 @@ namespace insta_client
         private StreamReader f_reader = null;
         private StreamWriter f_writer = null;
         private bool is_connected = false;
-        private Thread thread;
+        private Thread thread = null;
         private delegate void Delegator();
         private Delegator delegator;
         private static int size = 1024 * 5;
         private byte[] r_buffer = new byte[size];
         private byte[] w_buffer = new byte[size];
-        public Flag success = null;
-        public Member member = null;
+        private Flag success = null;
+        private Member member = null;
 
         public Server()
         {
@@ -81,8 +81,10 @@ namespace insta_client
             while (f_reader.Peek() >= 0)
             {
                 ListViewItem item = new ListViewItem(i.ToString());
-                item.SubItems.Add(f_reader.ReadLine());
-                item.SubItems.Add(f_reader.ReadLine());
+                foreach(string str in f_reader.ReadLine().Split(new char[] { ',' })){
+                    item.SubItems.Add(str);
+                }
+                
                 lv_member.Items.Add(item);
                 i++;
             }
@@ -90,7 +92,7 @@ namespace insta_client
             this.f_reader = null;
         }
 
-        private void sign_in(Flag result)
+        private void sign_up(Flag result)
         {
             //check already exist member id
             foreach (ListViewItem item in lv_member.Items)
@@ -113,13 +115,11 @@ namespace insta_client
                 lv_member.Items.Add(item);
 
                 //log to tb_log
-                tb_log.AppendText(String.Format("{0} is registered...", this.member.ID));
+                tb_log.AppendText(String.Format("{0} is registered...\n", this.member.ID));
 
                 //save received packet data to member.txt
                 if (this.f_writer == null) this.f_writer = new StreamWriter("member.txt", true);
-
-                f_writer.WriteLine(this.member.ID);
-                f_writer.WriteLine(this.member.password);
+                f_writer.WriteLine(string.Format(this.member.ID + "," + this.member.password));
                 f_writer.Flush();
                 f_writer.Close();
                 f_writer = null;
@@ -135,30 +135,17 @@ namespace insta_client
         private void log_in(Flag result)
         {
             result.success = false;
-            /*
-            for (int i = 0; i < lv_member.Items.Count; i++){
-                //if exist corresponding ID
-                if (lv_member.Items[i].SubItems[1].Text == this.member.ID)
-                {
-                    //if match ID & password
-                    if(lv_member.Items[i].SubItems[2].Text == this.member.password)
-                    {
-                        result.success = true;
-
-                        //log to tb_log
-                        tb_log.AppendText(String.Format("{0} is log in...", this.member.ID));
-                    }
-                }
-            }
-            */
+            
+            //for all element in lv_member.items
             foreach(ListViewItem item in lv_member.Items)
             {
+                //if match id & password
                 if(item.SubItems[1].Text == this.member.ID && item.SubItems[2].Text == this.member.password)
                 {
                     result.success = true;
 
                     //log to tb_log
-                    tb_log.AppendText(String.Format("{0} is log in...", this.member.ID));
+                    tb_log.AppendText(String.Format("{0} is log in...\n", this.member.ID));
                 }
             }
 
@@ -167,6 +154,24 @@ namespace insta_client
             this.send();
 
             MessageBox.Show("log in process and send result packet complete");
+        }
+
+        private void send_member_list()
+        {
+            Member mem = new Member();
+            mem.Type = (int)PacketType.member;
+            mem.purpose = 3;
+            
+            foreach(ListViewItem item in lv_member.Items)
+            {
+                mem.ID = item.SubItems[1].Text;
+
+                //serialize packet
+                Packet.Serialize(mem).CopyTo(this.w_buffer, 0);
+                this.send();
+
+                //MessageBox.Show(string.Format("send id '{0}'", mem.ID));
+            }
         }
 
         private void receive()
@@ -286,15 +291,20 @@ namespace insta_client
                                         result.Type = (int)PacketType.flag;
                                         result.success = true;
 
-                                        //if packet for sign in
+                                        //if packet for sign up
                                         if (this.member.purpose == 1)
                                         {
-                                            sign_in(result);
+                                            sign_up(result);
                                         }
                                         //if packet for log in
                                         else if(this.member.purpose == 2)
                                         {
                                             log_in(result);
+                                        }
+                                        //if packet for member list request
+                                        else if(this.member.purpose == 3)
+                                        {
+                                            send_member_list();
                                         }
 
                                         break;

@@ -12,6 +12,7 @@ using System.Net.Sockets;
 using System.IO;
 using System.Threading;
 using insta_packet;
+using System.Drawing;
 
 namespace insta_server
 {
@@ -23,12 +24,14 @@ namespace insta_server
         private StreamWriter f_writer = null;
         private bool is_connected = false;
         private bool is_login = false;
-        private Thread thread;
+        private string login_id = null;
+        private string login_password = null;
+        private Thread thread = null;
         private static int size = 1024 * 5;
         private byte[] r_buffer = new byte[size];
         private byte[] w_buffer = new byte[size];
-        public Flag success = null;
-        public Member member = null;
+        private Flag success = null;
+        private Member member = null;
 
         public Client()
         {
@@ -45,14 +48,81 @@ namespace insta_server
             pn_search.Visible = false;
             pn_upload.Visible = false;
             pn_mypage.Visible = false;
+            pb_home_icon.BackColor = Color.FromArgb(150, Color.BurlyWood);
+            pb_search_icon.BackColor = Color.FromArgb(0, Color.White);
+            pb_upload_icon.BackColor = Color.FromArgb(0, Color.White);
+            pb_mypage_icon.BackColor = Color.FromArgb(0, Color.White);
+
         }
 
         private void pb_search_icon_Click(object sender, EventArgs e)
         {
+            this.Invoke(new MethodInvoker(delegate ()
+            {
+
+            }));
+
             pn_home.Visible = false;
             pn_search.Visible = true;
             pn_upload.Visible = false;
             pn_mypage.Visible = false;
+            pb_home_icon.BackColor = Color.FromArgb(0, Color.White);
+            pb_search_icon.BackColor = Color.FromArgb(150, Color.BurlyWood);
+            pb_upload_icon.BackColor = Color.FromArgb(0, Color.White);
+            pb_mypage_icon.BackColor = Color.FromArgb(0, Color.White);
+
+            //if loged in
+            if (this.is_login)
+            {
+                //init lb_search
+                lb_search.Items.Clear();
+
+                //set Member packet to send
+                Member request = new Member();
+                request.Type = (int)PacketType.member;
+                request.purpose = 3;
+
+                //serialize and send
+                Packet.Serialize(request).CopyTo(this.w_buffer, 0);
+                send();
+                MessageBox.Show(string.Format("DataAvailable : {0}", this.stream.DataAvailable));
+                //receive result packet until end
+                while (this.stream.DataAvailable)
+                {
+                    //receive result packet from server
+                    //if error occur during prepare stream & r_buffer
+                    if (!preparing_receive()) return;
+
+                    Packet packet = (Packet)Packet.Deserialize(this.r_buffer);
+
+                    //if result packet is Member
+                    if (packet.Type == (int)PacketType.member)
+                    {
+                        this.member = (Member)Packet.Deserialize(this.r_buffer);
+
+                        //if result packet is for member list
+                        if (this.member.purpose == 3 && this.member.ID != this.login_id)
+                        {
+                            lb_search.Items.Add(this.member.ID);
+                            //MessageBox.Show(string.Format("received id : {0}", this.member.ID));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("not loged in");
+            }
+        }
+
+        private void bt_search_Click(object sender, EventArgs e)
+        {
+            //for all element. it change collection, so can't use foreach
+            for(int i=0; i<lb_search.Items.Count; i++)
+            {
+                //if listbox item don't contain search word, remove that item
+                if (!lb_search.Items[i].ToString().Contains(tb_search.Text)) lb_search.Items.RemoveAt(i--);
+            }
         }
 
         private void pb_upload_icon_Click(object sender, EventArgs e)
@@ -61,6 +131,10 @@ namespace insta_server
             pn_search.Visible = false;
             pn_upload.Visible = true;
             pn_mypage.Visible = false;
+            pb_home_icon.BackColor = Color.FromArgb(0, Color.White);
+            pb_search_icon.BackColor = Color.FromArgb(0, Color.White);
+            pb_upload_icon.BackColor = Color.FromArgb(150, Color.BurlyWood);
+            pb_mypage_icon.BackColor = Color.FromArgb(0, Color.White);
         }
 
         private void pb_mypage_icon_Click(object sender, EventArgs e)
@@ -69,9 +143,13 @@ namespace insta_server
             pn_search.Visible = false;
             pn_upload.Visible = false;
             pn_mypage.Visible = true;
+            pb_home_icon.BackColor = Color.FromArgb(0, Color.White);
+            pb_search_icon.BackColor = Color.FromArgb(0, Color.White);
+            pb_upload_icon.BackColor = Color.FromArgb(0, Color.White);
+            pb_mypage_icon.BackColor = Color.FromArgb(150, Color.BurlyWood);
         }
 
-        public void send()
+        private void send()
         {
             if(this.stream != null)
             {
@@ -216,11 +294,11 @@ namespace insta_server
 
                     if (this.success.success)
                     {
-                        MessageBox.Show("sign in success!");
+                        MessageBox.Show("sign up success");
                     }
                     else
                     {
-                        MessageBox.Show("sign in fail!");
+                        MessageBox.Show("sign up fail");
                     }
                 }
             }
@@ -238,8 +316,8 @@ namespace insta_server
                 Member mem = new Member();
                 mem.Type = (int)PacketType.member;
                 mem.purpose = 2;
-                mem.ID = this.tb_id.Text;
-                mem.password = this.tb_password.Text;
+                mem.ID = tb_id.Text;
+                mem.password = tb_password.Text;
 
                 //serialize packet and send
                 Packet.Serialize(mem).CopyTo(this.w_buffer, 0);
@@ -259,21 +337,27 @@ namespace insta_server
                     if (this.success.success)
                     {
                         //if success to log in
-                        MessageBox.Show("log in success!");
+                        MessageBox.Show("log in success");
 
+                        //change bt_login button
                         bt_login.ForeColor = Color.OrangeRed;
                         bt_login.Text = "log out";
+
+                        //set log_in_id & log_in_password
+                        this.is_login = true;
+                        this.login_id = tb_id.Text;
+                        this.login_password = tb_password.Text;
                     }
                     else
                     {
                         //if fail to log in
-                        MessageBox.Show("log in fail!");
+                        MessageBox.Show("log in fail");
                     }
                 }
             }
             else
             {
-
+                MessageBox.Show("not connected");
             }
         }
 
@@ -283,9 +367,5 @@ namespace insta_server
             if (this.client != null) this.client.Close();
             if (this.stream != null) this.stream.Close();
         }
-
-        
-
-        
     }
 }

@@ -77,13 +77,16 @@ namespace insta_packet
     {
         public string ID;
         public string password;
-        //for sign in : 1
+        //for sign up : 1
         //for log in : 2
+        //for request member id list : 3
         public int purpose;
+
         public Member()
         {
             this.ID = null;
             this.password = null;
+            this.purpose = 0;
         }
     }
 }
