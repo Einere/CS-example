@@ -25,11 +25,12 @@ namespace insta_client
         private Thread thread = null;
         private delegate void Delegator();
         private Delegator delegator;
-        private static int size = 1024 * 5;
+        private static int size = 1024 * 10;
         private byte[] r_buffer = new byte[size];
         private byte[] w_buffer = new byte[size];
         private Flag success = null;
         private Member member = null;
+        private Post post = null;
 
         public Server()
         {
@@ -73,6 +74,15 @@ namespace insta_client
 
         private void read_load_m_file()
         {
+            try
+            {
+                this.f_reader = new StreamReader("member.txt");
+            }
+            catch
+            {
+                MessageBox.Show("fail to open member.txt at read_load_m_file()");
+            }
+
             //set offset to head
             if (this.f_reader.Peek() < 0) this.f_reader.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -118,8 +128,10 @@ namespace insta_client
                 tb_log.AppendText(String.Format("{0} is registered...\n", this.member.ID));
 
                 //save received packet data to member.txt
-                if (this.f_writer == null) this.f_writer = new StreamWriter("member.txt", true);
-                f_writer.WriteLine(string.Format(this.member.ID + "," + this.member.password));
+                if (this.f_writer == null) {
+                    this.f_writer = new StreamWriter("member.txt", true);
+                }
+                f_writer.WriteLine(string.Format(this.member.ID + "," + this.member.password + "," + Convert.ToBase64String(this.member.profile_pic) + "," + this.member.comment + "," + this.member.post_count.ToString()));
                 f_writer.Flush();
                 f_writer.Close();
                 f_writer = null;
@@ -185,24 +197,21 @@ namespace insta_client
                     return;
                 }
 
-                //check file is exist, open or return
-                if (File.Exists("member.txt"))
-                {
-                    try
-                    {
-                        f_reader = new StreamReader("member.txt");
-                    }
-                    catch
-                    {
-                        MessageBox.Show("failed to open stream reader");
-                        this.listener.Stop();
-                        return;
-                    }
-                }
-                else
+                //check file is exist, create or return
+                if (!File.Exists("member.txt"))
                 {
                     MessageBox.Show("file isn't exist");
-                    File.Create("member.txt"); // need to write encoding argument
+                    FileStream f_stream = File.Create("member.txt"); // need to write encoding argument
+                    f_stream.Close();
+                    return;
+                }
+
+                //check file is exist, create or return
+                if (!File.Exists("post.txt"))
+                {
+                    MessageBox.Show("file isn't exist");
+                    FileStream f_stream = File.Create("post.txt"); // need to write encoding argument
+                    f_stream.Close();
                     return;
                 }
 
@@ -309,6 +318,41 @@ namespace insta_client
 
                                         break;
                                     }
+                                case (int)PacketType.post:
+                                    {
+                                        this.post = (Post)Packet.Deserialize(this.r_buffer);
+
+                                        //return result to client
+                                        this.success = new Flag();
+                                        this.success.Type = (int)PacketType.flag;
+
+                                        try
+                                        {
+                                            //save received post data
+                                            if (this.f_writer == null) f_writer = new StreamWriter("post.txt", true);
+                                            string str = string.Format(this.post.ID + "," + Convert.ToBase64String(this.post.picture) + "," + this.post.comment);
+                                            f_writer.WriteLine(str);
+                                            f_writer.Flush();
+                                            f_writer.Close();
+                                            f_writer = null;
+
+                                            this.success.success = true;
+                                        }
+                                        catch(Exception e)
+                                        {
+                                            MessageBox.Show(e.ToString());
+                                            //MessageBox.Show(Encoding.UTF8.GetString(this.post.picture));
+                                            this.success.success = false;
+                                            
+                                        }
+
+                                        //serialize and send to client
+                                        Packet.Serialize(this.success).CopyTo(w_buffer, 0);
+                                        send();
+
+                                        break;
+                                    }
+
                                 default:
                                     {
                                         bt_start.ForeColor = Color.Black;

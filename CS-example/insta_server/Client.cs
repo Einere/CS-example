@@ -27,11 +27,12 @@ namespace insta_server
         private string login_id = null;
         private string login_password = null;
         private Thread thread = null;
-        private static int size = 1024 * 5;
+        private static int size = 1024 * 10;
         private byte[] r_buffer = new byte[size];
         private byte[] w_buffer = new byte[size];
         private Flag success = null;
         private Member member = null;
+        private Post post = null;
 
         public Client()
         {
@@ -57,11 +58,6 @@ namespace insta_server
 
         private void pb_search_icon_Click(object sender, EventArgs e)
         {
-            this.Invoke(new MethodInvoker(delegate ()
-            {
-
-            }));
-
             pn_home.Visible = false;
             pn_search.Visible = true;
             pn_upload.Visible = false;
@@ -135,6 +131,84 @@ namespace insta_server
             pb_search_icon.BackColor = Color.FromArgb(0, Color.White);
             pb_upload_icon.BackColor = Color.FromArgb(150, Color.BurlyWood);
             pb_mypage_icon.BackColor = Color.FromArgb(0, Color.White);
+            tb_find.Enabled = false;
+
+            if (this.is_login)
+            {
+                bt_find.Enabled = true;
+                tb_upload.Enabled = true;
+                bt_upload.Enabled = true;
+            }
+            else
+            {
+                bt_find.Enabled = false;
+                tb_upload.Enabled = false;
+                bt_upload.Enabled = false;
+
+                MessageBox.Show("not loged in");
+            }
+        }
+
+        private void bt_find_Click(object sender, EventArgs e)
+        {
+            //if select picture
+            if(OFD.ShowDialog() == DialogResult.OK)
+            {
+                tb_find.Text = OFD.FileName;
+                pb_upload.Image = Image.FromFile(OFD.FileName);
+            } 
+        }
+
+        private void bt_upload_Click(object sender, EventArgs e)
+        {
+            //if don't select picture
+            if (pb_upload.Image == null)
+            {
+                MessageBox.Show("select picture to upload");
+                return;
+            }
+
+            //send post packet to server
+            this.post = new Post();
+            this.post.Type = (int)PacketType.post;
+            this.post.ID = this.login_id;
+            this.post.picture = new ImageConverter().ConvertTo(pb_upload.Image, typeof(byte[])) as byte[];
+            this.post.comment = tb_upload.Text;
+            this.post.time = DateTime.Now;
+
+            //send post packet
+            Packet.Serialize(post).CopyTo(this.w_buffer, 0);
+            this.send();
+
+            MessageBox.Show("uploading...");
+
+            //receive result packet from server
+            //if error occur during prepare stream & r_buffer
+            if (!preparing_receive()) return;
+
+            Packet packet = (Packet)Packet.Deserialize(this.r_buffer);
+
+            //if received flag packet
+            if (packet.Type == (int)PacketType.flag)
+            {
+                this.success = (Flag)Packet.Deserialize(this.r_buffer);
+
+                if (this.success.success)
+                {
+                    //if success to upload
+                    MessageBox.Show("upload sucess");
+
+                    //reset control
+                    tb_find.Text = null;
+                    pb_upload.Image = null;
+                    tb_upload.Text = null;
+                }
+                else
+                {
+                    //if fail to upload
+                    MessageBox.Show("upload failed");
+                }
+            }
         }
 
         private void pb_mypage_icon_Click(object sender, EventArgs e)
@@ -147,6 +221,8 @@ namespace insta_server
             pb_search_icon.BackColor = Color.FromArgb(0, Color.White);
             pb_upload_icon.BackColor = Color.FromArgb(0, Color.White);
             pb_mypage_icon.BackColor = Color.FromArgb(150, Color.BurlyWood);
+
+
         }
 
         private void send()
@@ -276,6 +352,9 @@ namespace insta_server
                 mem.purpose = 1;
                 mem.ID = this.tb_id.Text;
                 mem.password = this.tb_password.Text;
+                mem.profile_pic = new ImageConverter().ConvertTo(Image.FromFile("C:/Users/HJ/Desktop/공부/3-1/응용소프트웨어실습/[과제]02 - instagram/profile_img.jpg"), typeof(byte[])) as byte[];
+                mem.comment = null;
+                mem.post_count = 0;
 
                 //serialize packet and send
                 Packet.Serialize(mem).CopyTo(this.w_buffer, 0);
@@ -367,5 +446,7 @@ namespace insta_server
             if (this.client != null) this.client.Close();
             if (this.stream != null) this.stream.Close();
         }
+
+        
     }
 }

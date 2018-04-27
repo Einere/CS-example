@@ -66,6 +66,7 @@
             this.lb_post_count = new System.Windows.Forms.Label();
             this.lb_post = new System.Windows.Forms.Label();
             this.pb_profile = new System.Windows.Forms.PictureBox();
+            this.OFD = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.pb_home_icon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_upload_icon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_search_icon)).BeginInit();
@@ -298,6 +299,7 @@
             this.bt_upload.TabIndex = 4;
             this.bt_upload.Text = "upload";
             this.bt_upload.UseVisualStyleBackColor = true;
+            this.bt_upload.Click += new System.EventHandler(this.bt_upload_Click);
             // 
             // tb_upload
             // 
@@ -310,6 +312,8 @@
             // 
             // pb_upload
             // 
+            this.pb_upload.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pb_upload.Cursor = System.Windows.Forms.Cursors.Default;
             this.pb_upload.Location = new System.Drawing.Point(3, 32);
             this.pb_upload.Name = "pb_upload";
             this.pb_upload.Size = new System.Drawing.Size(671, 433);
@@ -324,6 +328,7 @@
             this.bt_find.TabIndex = 1;
             this.bt_find.Text = "find";
             this.bt_find.UseVisualStyleBackColor = true;
+            this.bt_find.Click += new System.EventHandler(this.bt_find_Click);
             // 
             // tb_find
             // 
@@ -419,6 +424,10 @@
             this.pb_profile.TabIndex = 0;
             this.pb_profile.TabStop = false;
             // 
+            // OFD
+            // 
+            this.OFD.FileName = "openFileDialog1";
+            // 
             // Client
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -504,6 +513,7 @@
         private System.Windows.Forms.Label lb_post_count;
         private System.Windows.Forms.Label lb_post;
         private System.Windows.Forms.PictureBox pb_profile;
+        private System.Windows.Forms.OpenFileDialog OFD;
     }
 }
 

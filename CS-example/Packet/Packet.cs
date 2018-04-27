@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Drawing;
+using System.Net.Mime;
 
 namespace insta_packet
 {
@@ -16,8 +18,7 @@ namespace insta_packet
     {
         flag = 0,
         member = 1,
-        info = 2,
-        home = 3
+        post = 2
     }
 
     public enum PacketSendERROR
@@ -77,16 +78,39 @@ namespace insta_packet
     {
         public string ID;
         public string password;
+        public byte[] profile_pic;
+        public string comment;
+        public int post_count;
         //for sign up : 1
         //for log in : 2
         //for request member id list : 3
+        //for request member info : 4
         public int purpose;
 
         public Member()
         {
             this.ID = null;
             this.password = null;
+            this.profile_pic = null;
+            this.comment = null;
+            this.post_count = 0;
             this.purpose = 0;
+        }
+    }
+
+    [Serializable]
+    public class Post : Packet
+    {
+        public string ID;
+        public byte[] picture;
+        public string comment;
+        public DateTime time;
+
+        public Post()
+        {
+            this.ID = null;
+            this.picture = null;
+            this.comment = null;
         }
     }
 }
