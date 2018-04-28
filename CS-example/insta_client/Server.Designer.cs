@@ -109,6 +109,7 @@
             this.Index,
             this.ID,
             this.Password});
+            this.lv_member.FullRowSelect = true;
             this.lv_member.GridLines = true;
             this.lv_member.Location = new System.Drawing.Point(12, 67);
             this.lv_member.Name = "lv_member";

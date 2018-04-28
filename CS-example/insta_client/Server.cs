@@ -91,10 +91,13 @@ namespace insta_client
             while (f_reader.Peek() >= 0)
             {
                 ListViewItem item = new ListViewItem(i.ToString());
-                foreach(string str in f_reader.ReadLine().Split(new char[] { ',' })){
+
+                //add all member data to tuple for list view
+                foreach (string str in f_reader.ReadLine().Split(new char[] { ',' })){
                     item.SubItems.Add(str);
                 }
-                
+
+                //add tuple to list view
                 lv_member.Items.Add(item);
                 i++;
             }
@@ -168,6 +171,110 @@ namespace insta_client
             MessageBox.Show("log in process and send result packet complete");
         }
 
+        private void upload()
+        {
+            try
+            {
+                //save received post data
+                if (this.f_writer == null) f_writer = new StreamWriter("post.txt", true);
+                string str = string.Format(this.post.ID + "," + Convert.ToBase64String(this.post.picture) + "," + this.post.comment + "," + this.post.time);
+                f_writer.WriteLine(str);
+                f_writer.Flush();
+                f_writer.Close();
+                f_writer = null;
+
+                this.success.success = true;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+                //MessageBox.Show(Encoding.UTF8.GetString(this.post.picture));
+                this.success.success = false;
+
+            }
+
+            //serialize and send to client
+            Packet.Serialize(this.success).CopyTo(w_buffer, 0);
+            send();
+        }
+
+        private void send_all_post()
+        {
+            //send member data (id, profile_pic)
+            //set Member packet to send client
+            Member mem = new Member();
+            mem.Type = (int)PacketType.member;
+            mem.purpose = 5;
+
+            try
+            {
+                this.f_reader = new StreamReader("member.txt");
+            }
+            catch
+            {
+                MessageBox.Show("fail to open member.txt at send_all_post()");
+            }
+
+            //set offset to head
+            if (this.f_reader.Peek() < 0) this.f_reader.BaseStream.Seek(0, SeekOrigin.Begin);
+
+            //get data from text file
+            while (f_reader.Peek() >= 0)
+            {
+                //set packet 
+                string[] str = f_reader.ReadLine().Split(new char[] { ',' });
+                mem.ID = str[0];
+                mem.profile_pic = Convert.FromBase64String(str[2]);
+                
+                Packet.Serialize(mem).CopyTo(w_buffer, 0);
+                this.send();
+            }
+            this.f_reader.Close();
+            this.f_reader = null;
+
+            //send post data (id, pic, comment, time), alloc stack
+            Stack<Post> st = new Stack<Post>();
+
+            try
+            {
+                this.f_reader = new StreamReader("post.txt");
+            }
+            catch
+            {
+                MessageBox.Show("fail to open post.txt at send_all_post()");
+            }
+
+            //set offset to head
+            if (this.f_reader.Peek() < 0) this.f_reader.BaseStream.Seek(0, SeekOrigin.Begin);
+
+            //get data from text file
+            while (f_reader.Peek() >= 0)
+            {
+                //set packet 
+                string[] str = f_reader.ReadLine().Split(new char[] { ',' });
+                Post r_post = new Post();
+                r_post.Type = (int)PacketType.post;
+                r_post.purpose = 2;
+                r_post.ID = str[0];
+                r_post.picture = Convert.FromBase64String(str[1]);
+                r_post.comment = str[2];
+                r_post.time = (DateTime)new DateTimeConverter().ConvertFromString(str[3]);
+
+                //push to stack
+                st.Push(r_post);
+            }
+
+            foreach (Post w_post in st)
+            {
+                //send Post packet to client
+                Packet.Serialize(w_post).CopyTo(w_buffer, 0);
+                this.send();
+            }
+            
+            this.f_reader.Close();
+            this.f_reader = null;
+        }
+
         private void send_member_list()
         {
             Member mem = new Member();
@@ -181,8 +288,6 @@ namespace insta_client
                 //serialize packet
                 Packet.Serialize(mem).CopyTo(this.w_buffer, 0);
                 this.send();
-
-                //MessageBox.Show(string.Format("send id '{0}'", mem.ID));
             }
         }
 
@@ -241,16 +346,22 @@ namespace insta_client
 
             //get data from post.txt
             int count = 0;
+            Stack<string[]> infos = new Stack<string[]>();
             while (f_reader.Peek() >= 0)
             {
                 string[] str_arr = this.f_reader.ReadLine().Split(new char[] { ',' });
+                infos.Push(str_arr);
+            }
+
+            foreach(string[] str_arr in infos)
+            {
                 //if same id in tuple, count++
                 if (str_arr[0] == login_id)
                 {
                     //set post packet to send client
                     this.post.picture = Convert.FromBase64String(str_arr[1]);
                     this.post.comment = str_arr[2];
-                    this.post.time = DateTime.Parse(str_arr[3]);
+                    this.post.time = (DateTime)new DateTimeConverter().ConvertFromString(str_arr[3]);
 
                     //send post packet to client
                     Packet.Serialize(this.post).CopyTo(w_buffer, 0);
@@ -267,7 +378,6 @@ namespace insta_client
             //send member packet to client
             Packet.Serialize(mem).CopyTo(w_buffer, 0);
             this.send();
-            MessageBox.Show("send info complete");
         }
 
         private void receive()
@@ -306,7 +416,7 @@ namespace insta_client
                 bt_start.ForeColor = Color.OrangeRed;
                 bt_start.Text = "stop";
 
-                MessageBox.Show("member account list load complete");
+                MessageBox.Show("member account list load complete (not remove this code)");
 
                 //check client is connected or not
                 if (!this.is_connected)
@@ -414,29 +524,17 @@ namespace insta_client
                                         this.success = new Flag();
                                         this.success.Type = (int)PacketType.flag;
 
-                                        try
+                                        switch (this.post.purpose)
                                         {
-                                            //save received post data
-                                            if (this.f_writer == null) f_writer = new StreamWriter("post.txt", true);
-                                            string str = string.Format(this.post.ID + "," + Convert.ToBase64String(this.post.picture) + "," + this.post.comment + "," + this.post.time);
-                                            f_writer.WriteLine(str);
-                                            f_writer.Flush();
-                                            f_writer.Close();
-                                            f_writer = null;
-
-                                            this.success.success = true;
+                                            //if packet for upload post
+                                            case 1:
+                                                upload();
+                                                break;
+                                            //if packet for request all post
+                                            case 2:
+                                                send_all_post();
+                                                break;
                                         }
-                                        catch(Exception e)
-                                        {
-                                            MessageBox.Show(e.ToString());
-                                            //MessageBox.Show(Encoding.UTF8.GetString(this.post.picture));
-                                            this.success.success = false;
-                                            
-                                        }
-
-                                        //serialize and send to client
-                                        Packet.Serialize(this.success).CopyTo(w_buffer, 0);
-                                        send();
 
                                         break;
                                     }
@@ -487,5 +585,6 @@ namespace insta_client
             thread = new Thread(new ThreadStart(receive));
             thread.Start();
         }
+        
     }
 }

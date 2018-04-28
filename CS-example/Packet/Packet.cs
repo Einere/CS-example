@@ -81,11 +81,12 @@ namespace insta_packet
         public byte[] profile_pic;
         public string comment;
         public int post_count;
+        public int purpose;
         //for sign up : 1
         //for log in : 2
         //for member id : 3
         //for member info : 4
-        public int purpose;
+        //for member id, profile_pic : 5
 
         public Member()
         {
@@ -101,16 +102,21 @@ namespace insta_packet
     [Serializable]
     public class Post : Packet
     {
-        public string ID;
-        public byte[] picture;
-        public string comment;
+        public string ID = null;
+        public byte[] picture = null;
+        public string comment = null;
         public DateTime time;
+        public int purpose = 0;
+        //for upload : 1
+        //for all post : 2
 
         public Post()
         {
             this.ID = null;
             this.picture = null;
             this.comment = null;
+            this.time = DateTime.Now;
+            this.purpose = 0;
         }
     }
 }

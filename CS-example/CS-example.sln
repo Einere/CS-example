@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "insta_packet", "Packet\inst
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch03", "Ch03\Ch03.csproj", "{2702AD19-DBC3-4437-8522-C23E033E5F14}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsControlLibrary1", "WindowsFormsControlLibrary1\WindowsFormsControlLibrary1.csproj", "{4DCC35F0-E803-4C36-8C88-6D0720F8F66B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,18 @@ Global
 		{2702AD19-DBC3-4437-8522-C23E033E5F14}.Release|x64.Build.0 = Release|Any CPU
 		{2702AD19-DBC3-4437-8522-C23E033E5F14}.Release|x86.ActiveCfg = Release|Any CPU
 		{2702AD19-DBC3-4437-8522-C23E033E5F14}.Release|x86.Build.0 = Release|Any CPU
+		{4DCC35F0-E803-4C36-8C88-6D0720F8F66B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DCC35F0-E803-4C36-8C88-6D0720F8F66B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DCC35F0-E803-4C36-8C88-6D0720F8F66B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4DCC35F0-E803-4C36-8C88-6D0720F8F66B}.Debug|x64.Build.0 = Debug|Any CPU
+		{4DCC35F0-E803-4C36-8C88-6D0720F8F66B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4DCC35F0-E803-4C36-8C88-6D0720F8F66B}.Debug|x86.Build.0 = Debug|Any CPU
+		{4DCC35F0-E803-4C36-8C88-6D0720F8F66B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DCC35F0-E803-4C36-8C88-6D0720F8F66B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DCC35F0-E803-4C36-8C88-6D0720F8F66B}.Release|x64.ActiveCfg = Release|Any CPU
+		{4DCC35F0-E803-4C36-8C88-6D0720F8F66B}.Release|x64.Build.0 = Release|Any CPU
+		{4DCC35F0-E803-4C36-8C88-6D0720F8F66B}.Release|x86.ActiveCfg = Release|Any CPU
+		{4DCC35F0-E803-4C36-8C88-6D0720F8F66B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

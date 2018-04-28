@@ -13,6 +13,8 @@ using System.IO;
 using System.Threading;
 using insta_packet;
 using System.Drawing;
+using System.Collections;
+using WindowsFormsControlLibrary1;
 
 namespace insta_server
 {
@@ -33,12 +35,14 @@ namespace insta_server
         private Flag success = null;
         private Member member = null;
         private Post post = null;
+        private Queue<Post> post_Q = new Queue<Post>();
+        private Dictionary<string, Image> map = new Dictionary<string, Image>();
 
         public Client()
         {
             InitializeComponent();
 
-            pn_home.Parent = this;
+            flpn_home.Parent = this;
             pn_search.Parent = this;
             pn_upload.Parent = this;
             pn_mypage.Parent = this;
@@ -50,7 +54,7 @@ namespace insta_server
 
         private void pb_home_icon_Click(object sender, EventArgs e)
         {
-            pn_home.Visible = true;
+            flpn_home.Visible = true;
             pn_search.Visible = false;
             pn_upload.Visible = false;
             pn_mypage.Visible = false;
@@ -59,11 +63,90 @@ namespace insta_server
             pb_upload_icon.BackColor = Color.FromArgb(0, Color.White);
             pb_mypage_icon.BackColor = Color.FromArgb(0, Color.White);
 
+            if (is_login) load_home();
+            else MessageBox.Show("please log in");
+        }
+
+        private void load_home()
+        {
+            //reset post_Q
+            this.post_Q.Clear();
+
+            //set request packet to server
+            this.post = new Post();
+            this.post.Type = (int)PacketType.post;
+            this.post.purpose = 2;
+
+            //send request packet to server
+            Packet.Serialize(this.post).CopyTo(w_buffer, 0);
+            this.send();
+
+            Thread.Sleep(5000);
+
+            //receive packet until end
+            while (this.stream.DataAvailable)
+            {
+                //receive result packet from server
+                //if error occur during prepare stream & r_buffer
+                if (!preparing_receive()) return;
+
+                Packet packet = (Packet)Packet.Deserialize(this.r_buffer);
+
+                switch (packet.Type)
+                {
+                    //if receive Member packet
+                    case (int)PacketType.member:
+                        {
+                            this.member = (Member)Packet.Deserialize(this.r_buffer);
+
+                            if(this.member.purpose == 5)
+                            {
+                                try
+                                {
+                                    map.Add(this.member.ID, new ImageConverter().ConvertFrom(this.member.profile_pic) as Image);
+                                }
+                                catch(ArgumentException e)
+                                {
+                                    MessageBox.Show(string.Format("duplicate id when input data map... id : {0}",this.member.ID));
+                                }
+                                
+                            }
+                        }
+                        break;
+                    //if receive Post packet
+                    case (int)PacketType.post:
+                        {
+                            this.post = (Post)Packet.Deserialize(this.r_buffer);
+
+                            if(this.post.purpose == 2)
+                            {
+                                this.post_Q.Enqueue(this.post);
+                            }
+                        }
+                        break;
+                }
+            }
+
+            //add post at flpn_home
+            foreach (Post p in post_Q)
+            {
+                //alloc new post panel and set data
+                UserControl1 tmp = new UserControl1();
+                tmp.SetProfile(map[p.ID]);
+                tmp.SetId(p.ID);
+                tmp.SetPic(new ImageConverter().ConvertFrom(p.picture) as Image);
+                tmp.SetComment(p.comment);
+                tmp.SetTime(new DateTimeConverter().ConvertToString(p.time));
+
+                //add flpn_post
+                flpn_home.Controls.Add(tmp);
+            }
+
         }
 
         private void pb_search_icon_Click(object sender, EventArgs e)
         {
-            pn_home.Visible = false;
+            flpn_home.Visible = false;
             pn_search.Visible = true;
             pn_upload.Visible = false;
             pn_mypage.Visible = false;
@@ -86,6 +169,7 @@ namespace insta_server
                 //serialize and send
                 Packet.Serialize(request).CopyTo(this.w_buffer, 0);
                 send();
+
                 MessageBox.Show(string.Format("DataAvailable : {0}", this.stream.DataAvailable));
 
                 //receive result packet until end
@@ -129,7 +213,7 @@ namespace insta_server
 
         private void pb_upload_icon_Click(object sender, EventArgs e)
         {
-            pn_home.Visible = false;
+            flpn_home.Visible = false;
             pn_search.Visible = false;
             pn_upload.Visible = true;
             pn_mypage.Visible = false;
@@ -177,6 +261,7 @@ namespace insta_server
             //send post packet to server
             this.post = new Post();
             this.post.Type = (int)PacketType.post;
+            this.post.purpose = 1;
             this.post.ID = this.login_id;
             this.post.picture = new ImageConverter().ConvertTo(pb_upload.Image, typeof(byte[])) as byte[];
             this.post.comment = tb_upload.Text;
@@ -219,7 +304,7 @@ namespace insta_server
 
         private void pb_mypage_icon_Click(object sender, EventArgs e)
         {
-            pn_home.Visible = false;
+            flpn_home.Visible = false;
             pn_search.Visible = false;
             pn_upload.Visible = false;
             pn_mypage.Visible = true;
@@ -228,6 +313,7 @@ namespace insta_server
             pb_upload_icon.BackColor = Color.FromArgb(0, Color.White);
             pb_mypage_icon.BackColor = Color.FromArgb(150, Color.BurlyWood);
             flpn_post.Controls.Clear();
+            this.post_Q.Clear();
 
             //set member packet to send server
             this.member = new Member();
@@ -239,7 +325,7 @@ namespace insta_server
             Packet.Serialize(this.member).CopyTo(this.w_buffer, 0);
             this.send();
 
-            Thread.Sleep(3000);
+            Thread.Sleep(5000);
 
             //receive result packet until end
             while (this.stream.DataAvailable)
@@ -267,13 +353,51 @@ namespace insta_server
                         {
                             this.post = (Post)Packet.Deserialize(this.r_buffer);
 
-                            //make new picturebox, add to flpn_post
-                            PictureBox pb = new PictureBox();
-                            pb.Image = new ImageConverter().ConvertFrom(this.post.picture) as Image;
-                            flpn_post.Controls.Add(pb);
+                            //push received packet to post_Q
+                            this.post_Q.Enqueue(this.post);
+
                             break;
                         }
                 }
+            }
+            //trigger bt_grid
+            bt_view_grid.PerformClick();
+        }
+
+        private void bt_view_grid_Click(object sender, EventArgs e)
+        {
+            //reset flpn_post
+            flpn_post.Controls.Clear();
+            
+            foreach(Post p in post_Q)
+            {
+                //make new picturebox, add to flpn_post
+                PictureBox pb = new PictureBox();
+                pb.Size = new Size(200, 200);
+                pb.SizeMode = PictureBoxSizeMode.Zoom;
+                pb.Image = new ImageConverter().ConvertFrom(p.picture) as Image;
+                flpn_post.Controls.Add(pb);
+            }
+
+        }
+
+        private void bt_view_list_Click(object sender, EventArgs e)
+        {
+            //reset flpn_post
+            flpn_post.Controls.Clear();
+
+            foreach(Post p in post_Q)
+            {
+                //alloc new post panel and set data
+                UserControl1 tmp = new UserControl1();
+                tmp.SetProfile(pb_profile.Image);
+                tmp.SetId(login_id);
+                tmp.SetTime(new DateTimeConverter().ConvertToString(p.time));
+                tmp.SetPic(new ImageConverter().ConvertFrom(p.picture) as Image);
+                tmp.SetComment(p.comment);
+                
+                //add flpn_post
+                flpn_post.Controls.Add(tmp);
             }
         }
 
@@ -499,6 +623,9 @@ namespace insta_server
             if (this.stream != null) this.stream.Close();
         }
 
-        
+        private void post_tb_id_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
