@@ -37,6 +37,11 @@ namespace insta_server
         public Client()
         {
             InitializeComponent();
+
+            pn_home.Parent = this;
+            pn_search.Parent = this;
+            pn_upload.Parent = this;
+            pn_mypage.Parent = this;
             tb_id.Enabled = false;
             tb_password.Enabled = false;
             bt_login.Enabled = false;
@@ -82,6 +87,7 @@ namespace insta_server
                 Packet.Serialize(request).CopyTo(this.w_buffer, 0);
                 send();
                 MessageBox.Show(string.Format("DataAvailable : {0}", this.stream.DataAvailable));
+
                 //receive result packet until end
                 while (this.stream.DataAvailable)
                 {
@@ -221,8 +227,54 @@ namespace insta_server
             pb_search_icon.BackColor = Color.FromArgb(0, Color.White);
             pb_upload_icon.BackColor = Color.FromArgb(0, Color.White);
             pb_mypage_icon.BackColor = Color.FromArgb(150, Color.BurlyWood);
+            flpn_post.Controls.Clear();
 
+            //set member packet to send server
+            this.member = new Member();
+            this.member.Type = (int)PacketType.member;
+            this.member.purpose = 4;
+            this.member.ID = this.login_id;
 
+            //serialize send to server
+            Packet.Serialize(this.member).CopyTo(this.w_buffer, 0);
+            this.send();
+
+            Thread.Sleep(3000);
+
+            //receive result packet until end
+            while (this.stream.DataAvailable)
+            {
+                //if error occur during prepare stream & r_buffer
+                if (!preparing_receive()) return;
+
+                Packet result = (Packet)Packet.Deserialize(this.r_buffer);
+                switch (result.Type)
+                {
+                    //if receive member pacekt
+                    case (int)PacketType.member:
+                        {
+                            this.member = (Member)Packet.Deserialize(this.r_buffer);
+                            if (this.member.purpose == 4)
+                            {
+                                pb_profile.Image = new ImageConverter().ConvertFrom(this.member.profile_pic) as Image;
+                                tb_profile.Text = this.member.comment;
+                                lb_post_count.Text = this.member.post_count.ToString();
+                            }
+                            break;
+                        }
+                    //if receive post packet
+                    case (int)PacketType.post:
+                        {
+                            this.post = (Post)Packet.Deserialize(this.r_buffer);
+
+                            //make new picturebox, add to flpn_post
+                            PictureBox pb = new PictureBox();
+                            pb.Image = new ImageConverter().ConvertFrom(this.post.picture) as Image;
+                            flpn_post.Controls.Add(pb);
+                            break;
+                        }
+                }
+            }
         }
 
         private void send()

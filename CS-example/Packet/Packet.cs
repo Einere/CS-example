@@ -83,8 +83,8 @@ namespace insta_packet
         public int post_count;
         //for sign up : 1
         //for log in : 2
-        //for request member id list : 3
-        //for request member info : 4
+        //for member id : 3
+        //for member info : 4
         public int purpose;
 
         public Member()

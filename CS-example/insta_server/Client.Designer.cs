@@ -46,19 +46,11 @@
             this.pb_upload_icon = new System.Windows.Forms.PictureBox();
             this.pb_search_icon = new System.Windows.Forms.PictureBox();
             this.pb_mypage_icon = new System.Windows.Forms.PictureBox();
-            this.pn_home = new System.Windows.Forms.Panel();
             this.pn_search = new System.Windows.Forms.Panel();
             this.lb_search = new System.Windows.Forms.ListBox();
             this.bt_search = new System.Windows.Forms.Button();
             this.tb_search = new System.Windows.Forms.TextBox();
-            this.pn_upload = new System.Windows.Forms.Panel();
-            this.bt_upload = new System.Windows.Forms.Button();
-            this.tb_upload = new System.Windows.Forms.TextBox();
-            this.pb_upload = new System.Windows.Forms.PictureBox();
-            this.bt_find = new System.Windows.Forms.Button();
-            this.tb_find = new System.Windows.Forms.TextBox();
             this.pn_mypage = new System.Windows.Forms.Panel();
-            this.pn_post = new System.Windows.Forms.Panel();
             this.bt_view_list = new System.Windows.Forms.Button();
             this.bt_view_grid = new System.Windows.Forms.Button();
             this.tb_profile = new System.Windows.Forms.TextBox();
@@ -67,15 +59,23 @@
             this.lb_post = new System.Windows.Forms.Label();
             this.pb_profile = new System.Windows.Forms.PictureBox();
             this.OFD = new System.Windows.Forms.OpenFileDialog();
+            this.flpn_post = new System.Windows.Forms.FlowLayoutPanel();
+            this.pn_upload = new System.Windows.Forms.Panel();
+            this.tb_find = new System.Windows.Forms.TextBox();
+            this.bt_find = new System.Windows.Forms.Button();
+            this.pb_upload = new System.Windows.Forms.PictureBox();
+            this.tb_upload = new System.Windows.Forms.TextBox();
+            this.bt_upload = new System.Windows.Forms.Button();
+            this.pn_home = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pb_home_icon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_upload_icon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_search_icon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_mypage_icon)).BeginInit();
             this.pn_search.SuspendLayout();
-            this.pn_upload.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pb_upload)).BeginInit();
             this.pn_mypage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_profile)).BeginInit();
+            this.pn_upload.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pb_upload)).BeginInit();
             this.SuspendLayout();
             // 
             // lb_ip
@@ -234,19 +234,12 @@
             this.pb_mypage_icon.TabStop = false;
             this.pb_mypage_icon.Click += new System.EventHandler(this.pb_mypage_icon_Click);
             // 
-            // pn_home
-            // 
-            this.pn_home.Location = new System.Drawing.Point(345, 12);
-            this.pn_home.Name = "pn_home";
-            this.pn_home.Size = new System.Drawing.Size(677, 620);
-            this.pn_home.TabIndex = 17;
-            // 
             // pn_search
             // 
             this.pn_search.Controls.Add(this.lb_search);
             this.pn_search.Controls.Add(this.bt_search);
             this.pn_search.Controls.Add(this.tb_search);
-            this.pn_search.Location = new System.Drawing.Point(345, 12);
+            this.pn_search.Location = new System.Drawing.Point(333, 12);
             this.pn_search.Name = "pn_search";
             this.pn_search.Size = new System.Drawing.Size(677, 620);
             this.pn_search.TabIndex = 18;
@@ -278,68 +271,9 @@
             this.tb_search.Size = new System.Drawing.Size(583, 21);
             this.tb_search.TabIndex = 0;
             // 
-            // pn_upload
-            // 
-            this.pn_upload.Controls.Add(this.bt_upload);
-            this.pn_upload.Controls.Add(this.tb_upload);
-            this.pn_upload.Controls.Add(this.pb_upload);
-            this.pn_upload.Controls.Add(this.bt_find);
-            this.pn_upload.Controls.Add(this.tb_find);
-            this.pn_upload.Location = new System.Drawing.Point(345, 12);
-            this.pn_upload.Name = "pn_upload";
-            this.pn_upload.Size = new System.Drawing.Size(677, 620);
-            this.pn_upload.TabIndex = 19;
-            this.pn_upload.Visible = false;
-            // 
-            // bt_upload
-            // 
-            this.bt_upload.Location = new System.Drawing.Point(298, 594);
-            this.bt_upload.Name = "bt_upload";
-            this.bt_upload.Size = new System.Drawing.Size(75, 23);
-            this.bt_upload.TabIndex = 4;
-            this.bt_upload.Text = "upload";
-            this.bt_upload.UseVisualStyleBackColor = true;
-            this.bt_upload.Click += new System.EventHandler(this.bt_upload_Click);
-            // 
-            // tb_upload
-            // 
-            this.tb_upload.Location = new System.Drawing.Point(3, 471);
-            this.tb_upload.Multiline = true;
-            this.tb_upload.Name = "tb_upload";
-            this.tb_upload.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tb_upload.Size = new System.Drawing.Size(671, 117);
-            this.tb_upload.TabIndex = 3;
-            // 
-            // pb_upload
-            // 
-            this.pb_upload.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pb_upload.Cursor = System.Windows.Forms.Cursors.Default;
-            this.pb_upload.Location = new System.Drawing.Point(3, 32);
-            this.pb_upload.Name = "pb_upload";
-            this.pb_upload.Size = new System.Drawing.Size(671, 433);
-            this.pb_upload.TabIndex = 2;
-            this.pb_upload.TabStop = false;
-            // 
-            // bt_find
-            // 
-            this.bt_find.Location = new System.Drawing.Point(3, 3);
-            this.bt_find.Name = "bt_find";
-            this.bt_find.Size = new System.Drawing.Size(75, 23);
-            this.bt_find.TabIndex = 1;
-            this.bt_find.Text = "find";
-            this.bt_find.UseVisualStyleBackColor = true;
-            this.bt_find.Click += new System.EventHandler(this.bt_find_Click);
-            // 
-            // tb_find
-            // 
-            this.tb_find.Location = new System.Drawing.Point(84, 5);
-            this.tb_find.Name = "tb_find";
-            this.tb_find.Size = new System.Drawing.Size(590, 21);
-            this.tb_find.TabIndex = 0;
-            // 
             // pn_mypage
             // 
-            this.pn_mypage.Controls.Add(this.pn_post);
+            this.pn_mypage.Controls.Add(this.flpn_post);
             this.pn_mypage.Controls.Add(this.bt_view_list);
             this.pn_mypage.Controls.Add(this.bt_view_grid);
             this.pn_mypage.Controls.Add(this.tb_profile);
@@ -347,19 +281,11 @@
             this.pn_mypage.Controls.Add(this.lb_post_count);
             this.pn_mypage.Controls.Add(this.lb_post);
             this.pn_mypage.Controls.Add(this.pb_profile);
-            this.pn_mypage.Location = new System.Drawing.Point(345, 12);
+            this.pn_mypage.Location = new System.Drawing.Point(333, 12);
             this.pn_mypage.Name = "pn_mypage";
             this.pn_mypage.Size = new System.Drawing.Size(677, 620);
             this.pn_mypage.TabIndex = 20;
             this.pn_mypage.Visible = false;
-            // 
-            // pn_post
-            // 
-            this.pn_post.Location = new System.Drawing.Point(3, 166);
-            this.pn_post.Name = "pn_post";
-            this.pn_post.Size = new System.Drawing.Size(671, 451);
-            this.pn_post.TabIndex = 7;
-            this.pn_post.Visible = false;
             // 
             // bt_view_list
             // 
@@ -428,15 +354,87 @@
             // 
             this.OFD.FileName = "openFileDialog1";
             // 
+            // flpn_post
+            // 
+            this.flpn_post.Location = new System.Drawing.Point(3, 166);
+            this.flpn_post.Name = "flpn_post";
+            this.flpn_post.Size = new System.Drawing.Size(671, 444);
+            this.flpn_post.TabIndex = 0;
+            // 
+            // pn_upload
+            // 
+            this.pn_upload.Controls.Add(this.bt_upload);
+            this.pn_upload.Controls.Add(this.tb_upload);
+            this.pn_upload.Controls.Add(this.pb_upload);
+            this.pn_upload.Controls.Add(this.bt_find);
+            this.pn_upload.Controls.Add(this.tb_find);
+            this.pn_upload.Location = new System.Drawing.Point(333, 12);
+            this.pn_upload.Name = "pn_upload";
+            this.pn_upload.Size = new System.Drawing.Size(677, 620);
+            this.pn_upload.TabIndex = 19;
+            this.pn_upload.Visible = false;
+            // 
+            // tb_find
+            // 
+            this.tb_find.Location = new System.Drawing.Point(84, 5);
+            this.tb_find.Name = "tb_find";
+            this.tb_find.Size = new System.Drawing.Size(590, 21);
+            this.tb_find.TabIndex = 0;
+            // 
+            // bt_find
+            // 
+            this.bt_find.Location = new System.Drawing.Point(3, 3);
+            this.bt_find.Name = "bt_find";
+            this.bt_find.Size = new System.Drawing.Size(75, 23);
+            this.bt_find.TabIndex = 1;
+            this.bt_find.Text = "find";
+            this.bt_find.UseVisualStyleBackColor = true;
+            this.bt_find.Click += new System.EventHandler(this.bt_find_Click);
+            // 
+            // pb_upload
+            // 
+            this.pb_upload.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pb_upload.Cursor = System.Windows.Forms.Cursors.Default;
+            this.pb_upload.Location = new System.Drawing.Point(3, 32);
+            this.pb_upload.Name = "pb_upload";
+            this.pb_upload.Size = new System.Drawing.Size(671, 433);
+            this.pb_upload.TabIndex = 2;
+            this.pb_upload.TabStop = false;
+            // 
+            // tb_upload
+            // 
+            this.tb_upload.Location = new System.Drawing.Point(3, 471);
+            this.tb_upload.Multiline = true;
+            this.tb_upload.Name = "tb_upload";
+            this.tb_upload.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tb_upload.Size = new System.Drawing.Size(671, 117);
+            this.tb_upload.TabIndex = 3;
+            // 
+            // bt_upload
+            // 
+            this.bt_upload.Location = new System.Drawing.Point(298, 594);
+            this.bt_upload.Name = "bt_upload";
+            this.bt_upload.Size = new System.Drawing.Size(75, 23);
+            this.bt_upload.TabIndex = 4;
+            this.bt_upload.Text = "upload";
+            this.bt_upload.UseVisualStyleBackColor = true;
+            this.bt_upload.Click += new System.EventHandler(this.bt_upload_Click);
+            // 
+            // pn_home
+            // 
+            this.pn_home.Location = new System.Drawing.Point(333, 12);
+            this.pn_home.Name = "pn_home";
+            this.pn_home.Size = new System.Drawing.Size(677, 620);
+            this.pn_home.TabIndex = 17;
+            // 
             // Client
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1034, 644);
-            this.Controls.Add(this.pn_search);
+            this.ClientSize = new System.Drawing.Size(1017, 644);
             this.Controls.Add(this.pn_mypage);
+            this.Controls.Add(this.pn_search);
             this.Controls.Add(this.pn_upload);
-            this.Controls.Add(this.pn_home);
             this.Controls.Add(this.pb_mypage_icon);
             this.Controls.Add(this.pb_search_icon);
             this.Controls.Add(this.pb_upload_icon);
@@ -454,6 +452,7 @@
             this.Controls.Add(this.lb_subject);
             this.Controls.Add(this.lb_port);
             this.Controls.Add(this.lb_ip);
+            this.Controls.Add(this.pn_home);
             this.Name = "Client";
             this.Text = "Form1";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Client_FormClosed);
@@ -463,12 +462,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.pb_mypage_icon)).EndInit();
             this.pn_search.ResumeLayout(false);
             this.pn_search.PerformLayout();
-            this.pn_upload.ResumeLayout(false);
-            this.pn_upload.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pb_upload)).EndInit();
             this.pn_mypage.ResumeLayout(false);
             this.pn_mypage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_profile)).EndInit();
+            this.pn_upload.ResumeLayout(false);
+            this.pn_upload.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pb_upload)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -493,19 +492,11 @@
         private System.Windows.Forms.PictureBox pb_upload_icon;
         private System.Windows.Forms.PictureBox pb_search_icon;
         private System.Windows.Forms.PictureBox pb_mypage_icon;
-        private System.Windows.Forms.Panel pn_home;
         private System.Windows.Forms.Panel pn_search;
         private System.Windows.Forms.ListBox lb_search;
         private System.Windows.Forms.Button bt_search;
         private System.Windows.Forms.TextBox tb_search;
-        private System.Windows.Forms.Panel pn_upload;
-        private System.Windows.Forms.Button bt_find;
-        private System.Windows.Forms.TextBox tb_find;
-        private System.Windows.Forms.Button bt_upload;
-        private System.Windows.Forms.TextBox tb_upload;
-        private System.Windows.Forms.PictureBox pb_upload;
         private System.Windows.Forms.Panel pn_mypage;
-        private System.Windows.Forms.Panel pn_post;
         private System.Windows.Forms.Button bt_view_list;
         private System.Windows.Forms.Button bt_view_grid;
         private System.Windows.Forms.TextBox tb_profile;
@@ -514,6 +505,14 @@
         private System.Windows.Forms.Label lb_post;
         private System.Windows.Forms.PictureBox pb_profile;
         private System.Windows.Forms.OpenFileDialog OFD;
+        private System.Windows.Forms.FlowLayoutPanel flpn_post;
+        private System.Windows.Forms.Panel pn_upload;
+        private System.Windows.Forms.Button bt_upload;
+        private System.Windows.Forms.TextBox tb_upload;
+        private System.Windows.Forms.PictureBox pb_upload;
+        private System.Windows.Forms.Button bt_find;
+        private System.Windows.Forms.TextBox tb_find;
+        private System.Windows.Forms.Panel pn_home;
     }
 }
 
