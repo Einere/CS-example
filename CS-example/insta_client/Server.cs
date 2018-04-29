@@ -300,7 +300,6 @@ namespace insta_client
                 list.Add(str_arr);
                 i++;
             }
-            MessageBox.Show(string.Format("index = {0}", index));
 
             this.f_reader.Close();
             this.f_reader = null;

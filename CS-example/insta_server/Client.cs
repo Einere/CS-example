@@ -12,7 +12,6 @@ using System.Net.Sockets;
 using System.IO;
 using System.Threading;
 using insta_packet;
-using System.Drawing;
 using System.Collections;
 using WindowsFormsControlLibrary1;
 
@@ -27,6 +26,7 @@ namespace insta_server
         private bool is_connected = false;
         private bool is_login = false;
         private string login_id = null;
+        private string search_id = null;
         private string login_password = null;
         private Thread thread = null;
         private static int size = 1024 * 10;
@@ -213,6 +213,15 @@ namespace insta_server
             }
         }
 
+        private void lb_search_DoubleClick(object sender, EventArgs e)
+        {
+            //set search id
+            if (lb_search.SelectedItem != null) this.search_id = lb_search.SelectedItem.ToString();
+
+            //trigger bt_grid
+            pb_mypage_icon_Click(null, null);
+        }
+
         private void pb_upload_icon_Click(object sender, EventArgs e)
         {
             flpn_home.Visible = false;
@@ -316,18 +325,24 @@ namespace insta_server
             pb_mypage_icon.BackColor = Color.FromArgb(150, Color.BurlyWood);
             flpn_post.Controls.Clear();
             this.post_Q.Clear();
+            if (this.search_id != null)
+            {
+                bt_modify.Visible = false;
+                tb_profile.Enabled = false;
+            }
 
             //set member packet to send server
             this.member = new Member();
             this.member.Type = (int)PacketType.member;
             this.member.purpose = 4;
-            this.member.ID = this.login_id;
+            if (this.search_id == null) this.member.ID = this.login_id;
+            else this.member.ID = this.search_id;
 
             //serialize send to server
             Packet.Serialize(this.member).CopyTo(this.w_buffer, 0);
             this.send();
 
-            Thread.Sleep(5000);
+            Thread.Sleep(3000);
 
             //receive result packet until end
             while (this.stream.DataAvailable)
@@ -364,6 +379,8 @@ namespace insta_server
             }
             //trigger bt_grid
             bt_view_grid.PerformClick();
+
+            this.search_id = null;
         }
 
         private void bt_view_grid_Click(object sender, EventArgs e)
