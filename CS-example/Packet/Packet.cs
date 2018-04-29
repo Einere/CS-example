@@ -87,7 +87,7 @@ namespace insta_packet
         //for member id : 3
         //for member info : 4
         //for member id, profile_pic : 5
-
+        //for modify : 6
         public Member()
         {
             this.ID = null;
@@ -102,11 +102,11 @@ namespace insta_packet
     [Serializable]
     public class Post : Packet
     {
-        public string ID = null;
-        public byte[] picture = null;
-        public string comment = null;
+        public string ID;
+        public byte[] picture;
+        public string comment;
         public DateTime time;
-        public int purpose = 0;
+        public int purpose;
         //for upload : 1
         //for all post : 2
 

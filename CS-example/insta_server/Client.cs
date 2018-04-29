@@ -69,8 +69,10 @@ namespace insta_server
 
         private void load_home()
         {
-            //reset post_Q
+            //reset post_Q & map& flpn_home
             this.post_Q.Clear();
+            this.map.Clear();
+            flpn_home.Controls.Clear();
 
             //set request packet to server
             this.post = new Post();
@@ -401,6 +403,45 @@ namespace insta_server
             }
         }
 
+        private void pb_profile_Click(object sender, EventArgs e)
+        {
+            //open dialog and select picture
+            if (OFD.ShowDialog() == DialogResult.OK)
+            {
+                pb_profile.Image = Image.FromFile(OFD.FileName);
+            }
+        }
+
+        private void bt_modify_Click(object sender, EventArgs e)
+        {
+            //set Member packet to modify
+            Member mem = new Member();
+            mem.Type = (int)PacketType.member;
+            mem.purpose = 6;
+            mem.ID = login_id;
+            mem.profile_pic = new ImageConverter().ConvertTo(pb_profile.Image, typeof(byte[])) as byte[];
+            mem.comment = tb_profile.Text;
+
+            //serialize and send Member packet
+            Packet.Serialize(mem).CopyTo(this.w_buffer, 0);
+            this.send();
+
+            MessageBox.Show("send modify packet...");
+
+            //receive result packet
+            if (!preparing_receive()) return;
+
+            Packet packet = (Packet)Packet.Deserialize(this.r_buffer);
+            if (packet.Type == (int)PacketType.flag)
+            {
+                this.success = (Flag)Packet.Deserialize(this.r_buffer);
+                //if success to modify 
+                if (this.success.success) MessageBox.Show("success to modify member info");
+                else MessageBox.Show("failed to modify member info");
+            }
+
+        }
+
         private void send()
         {
             if(this.stream != null)
@@ -627,5 +668,7 @@ namespace insta_server
         {
 
         }
+
+        
     }
 }

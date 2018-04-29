@@ -51,21 +51,21 @@
             this.bt_search = new System.Windows.Forms.Button();
             this.tb_search = new System.Windows.Forms.TextBox();
             this.pn_mypage = new System.Windows.Forms.Panel();
+            this.flpn_post = new System.Windows.Forms.FlowLayoutPanel();
             this.bt_view_list = new System.Windows.Forms.Button();
             this.bt_view_grid = new System.Windows.Forms.Button();
             this.tb_profile = new System.Windows.Forms.TextBox();
-            this.bt_edit = new System.Windows.Forms.Button();
+            this.bt_modify = new System.Windows.Forms.Button();
             this.lb_post_count = new System.Windows.Forms.Label();
             this.lb_post = new System.Windows.Forms.Label();
             this.pb_profile = new System.Windows.Forms.PictureBox();
             this.OFD = new System.Windows.Forms.OpenFileDialog();
-            this.flpn_post = new System.Windows.Forms.FlowLayoutPanel();
             this.pn_upload = new System.Windows.Forms.Panel();
-            this.tb_find = new System.Windows.Forms.TextBox();
-            this.bt_find = new System.Windows.Forms.Button();
-            this.pb_upload = new System.Windows.Forms.PictureBox();
-            this.tb_upload = new System.Windows.Forms.TextBox();
             this.bt_upload = new System.Windows.Forms.Button();
+            this.tb_upload = new System.Windows.Forms.TextBox();
+            this.pb_upload = new System.Windows.Forms.PictureBox();
+            this.bt_find = new System.Windows.Forms.Button();
+            this.tb_find = new System.Windows.Forms.TextBox();
             this.flpn_home = new System.Windows.Forms.FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.pb_home_icon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_upload_icon)).BeginInit();
@@ -277,7 +277,7 @@
             this.pn_mypage.Controls.Add(this.bt_view_list);
             this.pn_mypage.Controls.Add(this.bt_view_grid);
             this.pn_mypage.Controls.Add(this.tb_profile);
-            this.pn_mypage.Controls.Add(this.bt_edit);
+            this.pn_mypage.Controls.Add(this.bt_modify);
             this.pn_mypage.Controls.Add(this.lb_post_count);
             this.pn_mypage.Controls.Add(this.lb_post);
             this.pn_mypage.Controls.Add(this.pb_profile);
@@ -286,6 +286,16 @@
             this.pn_mypage.Size = new System.Drawing.Size(568, 620);
             this.pn_mypage.TabIndex = 20;
             this.pn_mypage.Visible = false;
+            // 
+            // flpn_post
+            // 
+            this.flpn_post.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.flpn_post.AutoScroll = true;
+            this.flpn_post.Location = new System.Drawing.Point(3, 166);
+            this.flpn_post.Name = "flpn_post";
+            this.flpn_post.Size = new System.Drawing.Size(562, 444);
+            this.flpn_post.TabIndex = 0;
             // 
             // bt_view_list
             // 
@@ -315,14 +325,15 @@
             this.tb_profile.Size = new System.Drawing.Size(378, 95);
             this.tb_profile.TabIndex = 4;
             // 
-            // bt_edit
+            // bt_modify
             // 
-            this.bt_edit.Location = new System.Drawing.Point(488, 3);
-            this.bt_edit.Name = "bt_edit";
-            this.bt_edit.Size = new System.Drawing.Size(75, 23);
-            this.bt_edit.TabIndex = 3;
-            this.bt_edit.Text = "edit";
-            this.bt_edit.UseVisualStyleBackColor = true;
+            this.bt_modify.Location = new System.Drawing.Point(488, 3);
+            this.bt_modify.Name = "bt_modify";
+            this.bt_modify.Size = new System.Drawing.Size(75, 23);
+            this.bt_modify.TabIndex = 3;
+            this.bt_modify.Text = "modify";
+            this.bt_modify.UseVisualStyleBackColor = true;
+            this.bt_modify.Click += new System.EventHandler(this.bt_modify_Click);
             // 
             // lb_post_count
             // 
@@ -351,20 +362,11 @@
             this.pb_profile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pb_profile.TabIndex = 0;
             this.pb_profile.TabStop = false;
+            this.pb_profile.Click += new System.EventHandler(this.pb_profile_Click);
             // 
             // OFD
             // 
             this.OFD.FileName = "openFileDialog1";
-            // 
-            // flpn_post
-            // 
-            this.flpn_post.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.flpn_post.AutoScroll = true;
-            this.flpn_post.Location = new System.Drawing.Point(3, 166);
-            this.flpn_post.Name = "flpn_post";
-            this.flpn_post.Size = new System.Drawing.Size(562, 444);
-            this.flpn_post.TabIndex = 0;
             // 
             // pn_upload
             // 
@@ -379,22 +381,24 @@
             this.pn_upload.TabIndex = 19;
             this.pn_upload.Visible = false;
             // 
-            // tb_find
+            // bt_upload
             // 
-            this.tb_find.Location = new System.Drawing.Point(84, 5);
-            this.tb_find.Name = "tb_find";
-            this.tb_find.Size = new System.Drawing.Size(590, 21);
-            this.tb_find.TabIndex = 0;
+            this.bt_upload.Location = new System.Drawing.Point(298, 594);
+            this.bt_upload.Name = "bt_upload";
+            this.bt_upload.Size = new System.Drawing.Size(75, 23);
+            this.bt_upload.TabIndex = 4;
+            this.bt_upload.Text = "upload";
+            this.bt_upload.UseVisualStyleBackColor = true;
+            this.bt_upload.Click += new System.EventHandler(this.bt_upload_Click);
             // 
-            // bt_find
+            // tb_upload
             // 
-            this.bt_find.Location = new System.Drawing.Point(3, 3);
-            this.bt_find.Name = "bt_find";
-            this.bt_find.Size = new System.Drawing.Size(75, 23);
-            this.bt_find.TabIndex = 1;
-            this.bt_find.Text = "find";
-            this.bt_find.UseVisualStyleBackColor = true;
-            this.bt_find.Click += new System.EventHandler(this.bt_find_Click);
+            this.tb_upload.Location = new System.Drawing.Point(3, 471);
+            this.tb_upload.Multiline = true;
+            this.tb_upload.Name = "tb_upload";
+            this.tb_upload.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tb_upload.Size = new System.Drawing.Size(671, 117);
+            this.tb_upload.TabIndex = 3;
             // 
             // pb_upload
             // 
@@ -406,24 +410,22 @@
             this.pb_upload.TabIndex = 2;
             this.pb_upload.TabStop = false;
             // 
-            // tb_upload
+            // bt_find
             // 
-            this.tb_upload.Location = new System.Drawing.Point(3, 471);
-            this.tb_upload.Multiline = true;
-            this.tb_upload.Name = "tb_upload";
-            this.tb_upload.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tb_upload.Size = new System.Drawing.Size(671, 117);
-            this.tb_upload.TabIndex = 3;
+            this.bt_find.Location = new System.Drawing.Point(3, 3);
+            this.bt_find.Name = "bt_find";
+            this.bt_find.Size = new System.Drawing.Size(75, 23);
+            this.bt_find.TabIndex = 1;
+            this.bt_find.Text = "find";
+            this.bt_find.UseVisualStyleBackColor = true;
+            this.bt_find.Click += new System.EventHandler(this.bt_find_Click);
             // 
-            // bt_upload
+            // tb_find
             // 
-            this.bt_upload.Location = new System.Drawing.Point(298, 594);
-            this.bt_upload.Name = "bt_upload";
-            this.bt_upload.Size = new System.Drawing.Size(75, 23);
-            this.bt_upload.TabIndex = 4;
-            this.bt_upload.Text = "upload";
-            this.bt_upload.UseVisualStyleBackColor = true;
-            this.bt_upload.Click += new System.EventHandler(this.bt_upload_Click);
+            this.tb_find.Location = new System.Drawing.Point(84, 5);
+            this.tb_find.Name = "tb_find";
+            this.tb_find.Size = new System.Drawing.Size(590, 21);
+            this.tb_find.TabIndex = 0;
             // 
             // flpn_home
             // 
@@ -506,7 +508,7 @@
         private System.Windows.Forms.Button bt_view_list;
         private System.Windows.Forms.Button bt_view_grid;
         private System.Windows.Forms.TextBox tb_profile;
-        private System.Windows.Forms.Button bt_edit;
+        private System.Windows.Forms.Button bt_modify;
         private System.Windows.Forms.Label lb_post_count;
         private System.Windows.Forms.Label lb_post;
         private System.Windows.Forms.PictureBox pb_profile;
