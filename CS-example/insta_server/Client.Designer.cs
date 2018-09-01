@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Client));
             this.lb_ip = new System.Windows.Forms.Label();
             this.lb_port = new System.Windows.Forms.Label();
             this.lb_subject = new System.Windows.Forms.Label();
@@ -192,7 +191,7 @@
             // 
             // pb_home_icon
             // 
-            this.pb_home_icon.Image = ((System.Drawing.Image)(resources.GetObject("pb_home_icon.Image")));
+            this.pb_home_icon.Image = global::insta_server.Properties.Resources.button_home;
             this.pb_home_icon.Location = new System.Drawing.Point(12, 372);
             this.pb_home_icon.Name = "pb_home_icon";
             this.pb_home_icon.Size = new System.Drawing.Size(131, 127);
@@ -203,10 +202,10 @@
             // 
             // pb_upload_icon
             // 
-            this.pb_upload_icon.Image = ((System.Drawing.Image)(resources.GetObject("pb_upload_icon.Image")));
+            this.pb_upload_icon.Image = global::insta_server.Properties.Resources.button_upload;
             this.pb_upload_icon.Location = new System.Drawing.Point(12, 505);
             this.pb_upload_icon.Name = "pb_upload_icon";
-            this.pb_upload_icon.Size = new System.Drawing.Size(131, 127);
+            this.pb_upload_icon.Size = new System.Drawing.Size(128, 128);
             this.pb_upload_icon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pb_upload_icon.TabIndex = 14;
             this.pb_upload_icon.TabStop = false;
@@ -214,7 +213,7 @@
             // 
             // pb_search_icon
             // 
-            this.pb_search_icon.Image = ((System.Drawing.Image)(resources.GetObject("pb_search_icon.Image")));
+            this.pb_search_icon.Image = global::insta_server.Properties.Resources.button_search;
             this.pb_search_icon.Location = new System.Drawing.Point(149, 372);
             this.pb_search_icon.Name = "pb_search_icon";
             this.pb_search_icon.Size = new System.Drawing.Size(131, 127);
@@ -225,7 +224,7 @@
             // 
             // pb_mypage_icon
             // 
-            this.pb_mypage_icon.Image = ((System.Drawing.Image)(resources.GetObject("pb_mypage_icon.Image")));
+            this.pb_mypage_icon.Image = global::insta_server.Properties.Resources.button_mypage;
             this.pb_mypage_icon.Location = new System.Drawing.Point(149, 505);
             this.pb_mypage_icon.Name = "pb_mypage_icon";
             this.pb_mypage_icon.Size = new System.Drawing.Size(131, 127);
@@ -356,7 +355,7 @@
             // 
             // pb_profile
             // 
-            this.pb_profile.Image = ((System.Drawing.Image)(resources.GetObject("pb_profile.Image")));
+            this.pb_profile.Image = global::insta_server.Properties.Resources.profile_img;
             this.pb_profile.Location = new System.Drawing.Point(3, 3);
             this.pb_profile.Name = "pb_profile";
             this.pb_profile.Size = new System.Drawing.Size(176, 157);

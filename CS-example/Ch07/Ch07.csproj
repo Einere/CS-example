@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{534B494C-7C27-4F2B-BCB5-AF160A4C9668}</ProjectGuid>
+    <ProjectGuid>{349CF9FC-0570-4D4B-8B7C-747CE18F98A2}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>insta_server</RootNamespace>
-    <AssemblyName>insta_server</AssemblyName>
+    <RootNamespace>Ch07</RootNamespace>
+    <AssemblyName>Ch07</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -45,14 +45,47 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client.cs">
+    <Compile Include="Ex01.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Client.Designer.cs">
-      <DependentUpon>Client.cs</DependentUpon>
+    <Compile Include="Ex01.Designer.cs">
+      <DependentUpon>Ex01.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ex02.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ex02.Designer.cs">
+      <DependentUpon>Ex02.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ex03.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ex03.Designer.cs">
+      <DependentUpon>Ex03.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ex04.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ex04.Designer.cs">
+      <DependentUpon>Ex04.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MyCircle.cs" />
+    <Compile Include="MyLines.cs" />
+    <Compile Include="MyRect.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Ex01.resx">
+      <DependentUpon>Ex01.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ex02.resx">
+      <DependentUpon>Ex02.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ex03.resx">
+      <DependentUpon>Ex03.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ex04.resx">
+      <DependentUpon>Ex04.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -61,11 +94,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Client.resx">
-      <DependentUpon>Client.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -78,34 +107,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Packet\insta_packet.csproj">
-      <Project>{f449a54b-1280-493a-9789-a57f5eca999a}</Project>
-      <Name>insta_packet</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WindowsFormsControlLibrary1\WindowsFormsControlLibrary1.csproj">
-      <Project>{4DCC35F0-E803-4C36-8C88-6D0720F8F66B}</Project>
-      <Name>WindowsFormsControlLibrary1</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Image1.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\button_home.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\button_mypage.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\button_search.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\button_upload.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\profile_img.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

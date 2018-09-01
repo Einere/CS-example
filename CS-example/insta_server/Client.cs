@@ -325,6 +325,12 @@ namespace insta_server
             pb_mypage_icon.BackColor = Color.FromArgb(150, Color.BurlyWood);
             flpn_post.Controls.Clear();
             this.post_Q.Clear();
+
+            if (!this.is_login)
+            {
+                MessageBox.Show("not loged in");
+                return;
+            }
             if (this.search_id != null)
             {
                 bt_modify.Visible = false;
